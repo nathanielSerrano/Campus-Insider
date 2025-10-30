@@ -1,7 +1,7 @@
 # Tasks
 
  * Schema Implementation
-   * Task Superviser: Ben - GitHub username: bennyyy51
+   * Task Supervisor: Ben - GitHub username: bennyyy51
    * Due Date: November 3, 2025
    * Subtasks:
      * Creation of Campus Location Entity w/ constraints
@@ -12,21 +12,21 @@
        * Ben
        * Nathaniel
  * Stored Procedures & Functions
-   * Task Superviser: Ahmad - GitHub username: AhmadMouhsen
+   * Task Supervisor: Ahmad - GitHub username: AhmadMouhsen
    * Due Date: November 7, 2025
    * Subtasks:
      * Compile list of Procedures & Functions to implement
        * Ahmad
-     * Implementation of procedure & functions
+     * Implementation of procedures & functions
        * Ahmad
        * Nathaniel
      * Query optimization
        * Ben
  * Web Scraping / Data Normalization
-   * Task Superviser: Nathaniel - GitHub username: nathanielSerrano
+   * Task Supervisor: Nathaniel - GitHub username: nathanielSerrano
    * Due Date: November 9, 2025
    * Subtasks:
-     * Create Scaper & Scrape data
+     * Create Scraper & Scrape data
        * Nathaniel
        * Ahmad
      * Data normalization
@@ -35,8 +35,9 @@
      * Inserting data into DB
        * Ben
  * Video
-   * Task Superviser: Nathaniel
+   * Task Supervisor: Nathaniel
    * Each member goes over the implementation regarding the task they supervised
    * Due Date: November 14, 2025
+
 
 
