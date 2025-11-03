@@ -18,7 +18,7 @@ Team Members:
 
  * Schema Implementation
    * Task Supervisor: Ben - GitHub username: bennyyy51
-   * Due Date: November 3, 2025
+   * Due Date: November 4, 2025
    * Subtasks:
      * Creation of Campus Location Entity w/ constraints
        * Ben
