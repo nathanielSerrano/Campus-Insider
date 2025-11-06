@@ -55,7 +55,7 @@ Team Members:
        * Ben
  * Video
    * Task Supervisor: Nathaniel
-   * Each member goes over the implementation regarding the task they supervised
+   * Each member records and goes over the task they supervised.
    * Due Date: November 14, 2025
 
 
