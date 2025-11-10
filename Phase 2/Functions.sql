@@ -1,4 +1,4 @@
-# Functions, run the functions first before the procedures since they are used by the them.
+-- Functions, run the functions first before the procedures since they are used by the them.
  
 DELIMITER $$
 CREATE FUNCTION GetUniversityIDByName(p_name VARCHAR(100))

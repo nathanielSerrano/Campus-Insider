@@ -3,7 +3,9 @@ USE campus_insider;
 
 CREATE TABLE university (
     university_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) NOT NULL,
+    state VARCHAR(50) NOT NULL,
+    UNIQUE (name, state)  -- ensures name+state combination is unique
 );
 
 CREATE TABLE campus (
