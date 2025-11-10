@@ -50,6 +50,41 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE AddCampus(
+    IN p_campus_name VARCHAR(100),
+    IN p_university_name VARCHAR(100)
+)
+BEGIN
+    DECLARE v_university_id INT;
+
+    -- Step 1: Lookup university_id using the existing function
+    SET v_university_id = GetUniversityIDByName(p_university_name);
+
+    -- Step 2: Check if university exists
+    IF v_university_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Specified university does not exist.';
+    END IF;
+
+    -- Step 3: Check if campus already exists for this university
+    IF EXISTS (
+        SELECT 1 FROM campus 
+        WHERE campus_name = p_campus_name 
+          AND university_id = v_university_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Campus already exists for this university.';
+    END IF;
+
+    -- Step 4: Insert the campus
+    INSERT INTO campus (campus_name, university_id)
+    VALUES (p_campus_name, v_university_id);
+
+    -- Step 5: Return success message
+    SELECT CONCAT('Campus "', p_campus_name, '" added to university "', p_university_name, '".') AS message;
+END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE CreateUser(
