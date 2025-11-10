@@ -1,0 +1,194 @@
+[
+  {
+    "library": "Glickman Library",
+    "room_name": "Group Study 2",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/DSC_1123.JPG",
+    "floor": "2nd floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "LCD Screen",
+      "Active Data Jacks",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Glickman Library",
+    "room_name": "Group Study 3",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/DSC_1125.JPG",
+    "floor": "2nd floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "LCD Screen",
+      "Active Data Jacks",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Glickman Library",
+    "room_name": "Group Study 4",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/DSC_1126.JPG",
+    "floor": "2nd floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "LCD Screen",
+      "Active Data Jacks",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Glickman Library",
+    "room_name": "Group Study 5",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/DSC_1127.JPG",
+    "floor": "2nd floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "LCD Screen",
+      "Active Data Jacks",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Glickman Library",
+    "room_name": "Group Study 6",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/DSC_1128.JPG",
+    "floor": "2nd floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "LCD Screen",
+      "Active Data Jacks",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Glickman Library",
+    "room_name": "Group Study 7",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/DSC_1146.JPG",
+    "floor": "2nd floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "Active Data Jacks",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Glickman Library",
+    "room_name": "Group Study 9",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/DSC_1115.JPG",
+    "floor": "5th floor",
+    "capacity": 12,
+    "amenities": [
+      "Small Whiteboard",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Gorham Library",
+    "room_name": "Seminar",
+    "image_url": "https://libapps.s3.amazonaws.com/accounts/4284/images/Seminar_Room_Gor.JPG",
+    "floor": "1st floor",
+    "capacity": 15,
+    "amenities": [
+      "Whiteboard",
+      "Projector & Screen",
+      "Active Data Jacks",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Gorham Library",
+    "room_name": "Group Study 1",
+    "image_url": "https://libapps.s3.amazonaws.com/accounts/4284/images/Gor_Grp_Study_1.JPG",
+    "floor": "1st floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Gorham Library",
+    "room_name": "Group Study 2",
+    "image_url": "https://libapps.s3.amazonaws.com/accounts/4284/images/Gor_Grp_Study_2.JPG",
+    "floor": "1st floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Gorham Library",
+    "room_name": "Group Study 3",
+    "image_url": "https://libapps.s3.amazonaws.com/accounts/4284/images/Study_Room_3_Gorham.JPG",
+    "floor": "1st floor",
+    "capacity": 4,
+    "amenities": [
+      "Whiteboard",
+      "Computer Workstation",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Gorham Library",
+    "room_name": "Group Study 4",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/Gorham_GS_4.JPG",
+    "floor": "1st floor",
+    "capacity": 4,
+    "amenities": [
+      "Whiteboard",
+      "Computer Workstation",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Gorham Library",
+    "room_name": "Group Study 5",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/Gorham_GS_5.JPG",
+    "floor": "1st floor",
+    "capacity": 4,
+    "amenities": [
+      "Whiteboard",
+      "Computer Workstation",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "Gorham Library",
+    "room_name": "223E",
+    "image_url": "https://libapps.s3.amazonaws.com/accounts/4284/images/Room_223E_Gorham.JPG",
+    "floor": "2nd Floor",
+    "capacity": 10,
+    "amenities": [
+      "Whiteboard",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "LAC Library",
+    "room_name": "Room 147A",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/LAC-Rm147A.JPG",
+    "floor": "1st floor",
+    "capacity": 6,
+    "amenities": [
+      "Whiteboard",
+      "Wireless Internet"
+    ]
+  },
+  {
+    "library": "LAC Library",
+    "room_name": "Room 147B",
+    "image_url": "https://s3.amazonaws.com/libapps/accounts/5192/images/LAC-Rm147B.JPG",
+    "floor": "1st floor",
+    "capacity": 10,
+    "amenities": [
+      "Reservable",
+      "Wireless Internet"
+    ]
+  }
+]

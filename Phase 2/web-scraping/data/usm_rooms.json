@@ -1,0 +1,1349 @@
+[
+  {
+    "building": "List of Rooms in Bailey Hall on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 10",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 301",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 405",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 208",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 223e (Library)",
+        "attributes": [
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 320",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 408",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 409",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 109",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 111",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 212",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 213",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 214",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 219",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 302",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 308",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 316",
+        "attributes": [
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 405",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 322",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 113",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 201",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 202",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 204",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 205",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 206",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 207",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 215",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 218",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 312",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 313",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 315",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 319",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 321",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 402",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 403",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 404",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Brooks Hall on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 219 - Upper Brooks",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Corthell Hall on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 209",
+        "attributes": [
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 320",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 112",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 211",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 212",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Glickman Library on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 717 - University Events Room (UER)",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 423 / 424",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 519",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 521",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 518",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Luther Bonney on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 103 - Talbot Hall",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 203",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 424",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 425",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 209",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 237",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 241",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 302",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 303",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 326",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 327",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 402",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 403",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 410",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 502",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 503",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 509",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 510",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 523",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 524",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Masterton Hall on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 113",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room G6",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 303",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 311",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 204/206",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 305",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room G08",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room G38",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Payson Smith on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 303",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 301 A",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 305",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 203 A",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 305 A",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 001",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 041",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 042",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 043",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 044",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 200",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 201",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 202",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 203",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 204",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 205",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 206",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 207",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 208",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 209",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 211",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 304",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 306",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Russell Hall on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 2C",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room C-R",
+        "attributes": [
+          "No Tech"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in the Abromson Center on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 109/110",
+        "attributes": [
+          "Presentation",
+          "No In-Room PCs"
+        ]
+      },
+      {
+        "room": "Room 212",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 213",
+        "attributes": [
+          "Presentation",
+          "No In-Room PC"
+        ]
+      },
+      {
+        "room": "Room\u00a0214/215",
+        "attributes": [
+          "Presentation",
+          "No In-Room PC"
+        ]
+      },
+      {
+        "room": "Room 216 - Distance Learning Room",
+        "attributes": [
+          "Presentation",
+          "No In-Room PC"
+        ]
+      },
+      {
+        "room": "Room 217",
+        "attributes": [
+          "Presentation",
+          "No In-Room PC"
+        ]
+      },
+      {
+        "room": "Room 218/219",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "No In-Room PC"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in the Costello Sports Complex on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 210 FH",
+        "attributes": [
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 122",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 210",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 100",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 201",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in the John Mitchell Center on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 217",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 215",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 253",
+        "attributes": [
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 255 / 257",
+        "attributes": [
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 259",
+        "attributes": [
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 147",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 181",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 241",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 242",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 265",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 270",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 151",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 164",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 233",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 235",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 252",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in the McGoldrick Center on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 203 - Salons A, B, & C",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 206 -\u00a0 MEMIC\u00a0Conference Room",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 234 - Husky Conference Room / Prentice Room",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 334",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 335",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in the Science Building on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 165",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room C294",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 082A",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 157",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 495cA",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 495cB",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 077",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 089",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 152",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 160",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 166",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 203",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 266",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 303",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 403",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 405",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room C277",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room C290",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room C392",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 262",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 362",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 533",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in the Wishcamper Center on USM's Portland Campus",
+    "rooms": [
+      {
+        "room": "Room 133 - Lee Hall",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 102",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 315",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 302",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 305",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 306",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 319/327",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 402",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 419/427",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 158 - Computer Lab",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 103",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 113",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 203",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 205",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 211",
+        "attributes": [
+          "Web Conferencing Lecture Style",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 415",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Upperclass Hall on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 106",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 112",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 113",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms in Upton Hastings on USM's Gorham Campus",
+    "rooms": [
+      {
+        "room": "Room 165",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 166",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 167",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      }
+    ]
+  },
+  {
+    "building": "List of Rooms on the Lewiston-Auburn Campus",
+    "rooms": [
+      {
+        "room": "Room 170",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 285",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 106",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 107",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 125",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 216A",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 216B",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 218",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 147",
+        "attributes": [
+          "Presentation",
+          "Customizations"
+        ]
+      },
+      {
+        "room": "Room 155",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 164",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 209",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 226",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 228",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 103",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 104",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 105",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 108",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 110",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 158",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 210",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 212",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 214",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 224",
+        "attributes": [
+          "Presentation"
+        ]
+      },
+      {
+        "room": "Room 283",
+        "attributes": [
+          "Web Conferencing Lecture Style"
+        ]
+      },
+      {
+        "room": "Room 287",
+        "attributes": [
+          "Presentation"
+        ]
+      }
+    ]
+  }
+]
