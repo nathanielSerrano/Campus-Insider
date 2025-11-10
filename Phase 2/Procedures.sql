@@ -25,6 +25,32 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- This Procedure doesn't account for universities with the same name if they exist in the database
+DELIMITER $$
+CREATE PROCEDURE RemoveUniversity(IN p_university_name VARCHAR(100))
+BEGIN
+    DECLARE v_university_id INT;
+
+    -- Try to find the university by name (case-insensitive)
+    SELECT university_id
+    INTO v_university_id
+    FROM university
+    WHERE LOWER(name) = LOWER(p_university_name)
+    LIMIT 1;
+
+    -- If no record found
+    IF v_university_id IS NULL THEN
+        SELECT CONCAT('No university found with name "', p_university_name, '".') AS message;
+    ELSE
+        -- Delete the university record
+        DELETE FROM university WHERE university_id = v_university_id;
+
+        SELECT CONCAT('University "', p_university_name, '" has been removed successfully.') AS message;
+    END IF;
+END $$
+DELIMITER ;
+
+
 DELIMITER $$
 CREATE PROCEDURE CreateUser(
     IN p_username VARCHAR(50),
