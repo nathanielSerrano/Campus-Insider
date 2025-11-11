@@ -135,3 +135,88 @@ END$$
 DELIMITER ;
 
 
+-- ===========================================
+-- Procedure: SearchRoomsByType
+-- ===========================================
+DELIMITER $$
+CREATE PROCEDURE SearchRoomsByType(IN p_room_type ENUM('study room', 'computer room', 'science lab', 'classroom', 'facility', 'meeting room', 'store', 'venue'))
+BEGIN
+    IF p_room_type NOT IN ('study room', 'computer room', 'science lab', 'classroom', 'facility', 'meeting room', 'store', 'venue') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Invalid room type.';
+    END IF;
+
+    SELECT 
+        r.LID AS room_id,
+        r.room_number,
+        r.room_type,
+        r.room_size,
+        rl.name AS room_name,
+        bl.LID AS building_id,
+        bl.name AS building_name,
+        rl.campus_name,
+        rl.university_id
+    FROM rooms r
+    JOIN location rl ON r.LID = rl.LID
+    JOIN location bl ON r.building_LID = bl.LID
+    WHERE r.room_type = p_room_type;
+END$$
+DELIMITER ;
+
+-- ===========================================
+-- Procedure: SearchRoomsBySize
+-- ===========================================
+DELIMITER $$
+CREATE PROCEDURE SearchRoomsBySize(IN p_room_size ENUM('small', 'medium', 'large'))
+BEGIN
+    IF p_room_size NOT IN ('small', 'medium', 'large') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Invalid room size.';
+    END IF;
+
+    SELECT 
+        r.LID AS room_id,
+        r.room_number,
+        r.room_type,
+        r.room_size,
+        rl.name AS room_name,
+        bl.LID AS building_id,
+        bl.name AS building_name,
+        rl.campus_name,
+        rl.university_id
+    FROM rooms r
+    JOIN location rl ON r.LID = rl.LID
+    JOIN location bl ON r.building_LID = bl.LID
+    WHERE r.room_size = p_room_size;
+END$$
+DELIMITER ;
+
+-- ===========================================
+-- Procedure: SearchRoomsByNumber
+-- ===========================================
+DELIMITER $$
+CREATE PROCEDURE SearchRoomsByNumber(IN p_room_number VARCHAR(10))
+BEGIN
+    IF p_room_number IS NULL OR p_room_number = '' THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Room number cannot be empty.';
+    END IF;
+
+    SELECT 
+        r.LID AS room_id,
+        r.room_number,
+        r.room_type,
+        r.room_size,
+        rl.name AS room_name,
+        bl.LID AS building_id,
+        bl.name AS building_name,
+        rl.campus_name,
+        rl.university_id
+    FROM rooms r
+    JOIN location rl ON r.LID = rl.LID
+    JOIN location bl ON r.building_LID = bl.LID
+    WHERE LOWER(r.room_number) = LOWER(p_room_number);
+END$$
+DELIMITER ;
+
+
