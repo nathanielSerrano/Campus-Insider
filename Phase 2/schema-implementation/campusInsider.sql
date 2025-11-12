@@ -41,7 +41,7 @@ CREATE TABLE buildings (
 CREATE TABLE rooms (
     LID INT PRIMARY KEY,
     building_LID INT NOT NULL,
-    room_number VARCHAR(10) NOT NULL,
+    room_number VARCHAR(10) NULL,
     room_type ENUM('study room', 'computer room', 'science lab', 'classroom', 'facility', 'meeting room', 'store', 'venue') NOT NULL,
     room_size ENUM('small', 'medium', 'large') NOT NULL,
     FOREIGN KEY (LID) REFERENCES location(LID) ON DELETE CASCADE,
