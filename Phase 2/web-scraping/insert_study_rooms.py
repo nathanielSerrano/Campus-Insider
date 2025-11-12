@@ -1,7 +1,7 @@
 import json
 import mysql.connector
 
-INPUT = "[path to rooms_clean.json]"
+INPUT = "[path to usm_study_rooms.json]"
 
 # --- Step 1: Load your raw JSON data ---
 with open(INPUT, "r") as f:
