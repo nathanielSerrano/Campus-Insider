@@ -1,0 +1,23 @@
+added cover index to rooms (room_type, room_number, room_size, building_LID), 
+because there are procedures referencing all of these attributes.
+room_type specifically being indexed helped when searching rooms by type:
+
+before: 
+-> Nested loop inner join  (cost=41.1 rows=27.2) (actual time=0.116..0.142 rows=16 loops=1)
+    -> Nested loop inner join  (cost=31.6 rows=27.2) (actual time=0.113..0.133 rows=16 loops=1)
+        -> Filter: (r.room_type = 'study room')  (cost=22.1 rows=27.2) (actual time=0.0954..0.1 rows=16 loops=1)
+            -> Table scan on r  (cost=22.1 rows=218) (actual time=0.0456..0.0852 rows=218 loops=1)
+        -> Single-row index lookup on rl using PRIMARY (LID=r.LID)  (cost=0.254 rows=1) (actual time=0.00188..0.00188 rows=1 loops=16)
+    -> Single-row index lookup on bl using PRIMARY (LID=r.building_LID)  (cost=0.254 rows=1) (actual time=388e-6..400e-6 rows=1 loops=16)
+
+after: 
+-> Nested loop inner join  (cost=13.1 rows=16) (actual time=0.0524..0.0834 rows=16 loops=1)
+    -> Nested loop inner join  (cost=7.47 rows=16) (actual time=0.05..0.0754 rows=16 loops=1)
+        -> Filter: (r.room_type = 'study room')  (cost=1.87 rows=16) (actual time=0.034..0.0426 rows=16 loops=1)
+            -> Covering index lookup on r using idx_rooms_cover (room_type='study room')  (cost=1.87 rows=16) (actual time=0.0319..0.0378 rows=16 loops=1)
+        -> Single-row index lookup on rl using PRIMARY (LID=r.LID)  (cost=0.256 rows=1) (actual time=0.00186..0.00188 rows=1 loops=16)
+    -> Single-row index lookup on bl using PRIMARY (LID=r.building_LID)  (cost=0.256 rows=1) (actual time=331e-6..344e-6 rows=1 loops=16)
+
+
+•	Execution time decreased from 0.116..0.142 to 0.0524..0.0834 and from 0.113..0.133 to 0.05..0.0754 in each nested join as well as a decreased estimated cost
+•	scanned rows went from 218 to 16 total
