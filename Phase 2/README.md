@@ -6,7 +6,12 @@ The work for phase 2 has been mostly organized into separate folders.
  * `schema-implementation/` is where all of our `.sql` scripts responsible for defining the schema are stored.
    * Each entity in the schema has its own respective `.sql` file.
    * There is a `Combined Campus Insider.sql` file that contains each of these individual scripts
- * `web-scraping/` is where all of our web-scraping related files are stored. This includes:
+ * `web-scraping/` is where all of our web-scraping related files are stored. To get our data, we scraped the following websites:
+   * American Colleges: https://en.wikipedia.org/wiki/Lists_of_American_universities_and_colleges
+   * USM Buildings/Rooms: https://tdx.maine.edu/TDClient/2624/Portal/KB/?CategoryID=22631
+   * USM Library Study Rooms: https://libguides.usm.maine.edu/guides/group-study-rooms/
+   
+The `web-scraping/` directory contains the following:
    * `data/` is a subdirectory that contains JSON files of data attained from web scraping. Any files with the word `clean` appended to the end of the name consist of data that has been modified to suit our database's needs.
    * `college_scrape.py` is a Python script that scrapes the following info on all American universities:
      * Name
@@ -83,6 +88,7 @@ To insert data into the database, complete the steps listed below. It is importa
    * Task Supervisor: Nathaniel
    * Each member records and goes over the task they supervised.
    * Due Date: November 14, 2025
+
 
 
 
