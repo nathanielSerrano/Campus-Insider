@@ -47,16 +47,18 @@ Team Members:
      * Scrape for buildings / rooms on campus
        * Nathaniel
      * Scrape for Institutions / Campuses
-       * Ahmad
+       * Ben
      * Data normalization
-       * Ahmad
+       * Ben
        * Nathaniel
      * Inserting data into DB
-       * Ben
+       * Nathaniel
  * Video
    * Task Supervisor: Nathaniel
    * Each member records and goes over the task they supervised.
    * Due Date: November 14, 2025
+
+
 
 
 
