@@ -2,23 +2,31 @@
 
 DELIMITER $$
 CREATE PROCEDURE CreateUniversity(
-    IN p_name VARCHAR(100)
+    IN p_name VARCHAR(100),
+    IN p_state VARCHAR(50),
+    IN p_wiki_url VARCHAR(255)
 )
 BEGIN
     DECLARE new_univ_id INT;
 
-    -- Check if a university with the same name already exists
-    IF EXISTS (SELECT 1 FROM university WHERE name = p_name) THEN
+    -- Check if a university with the same name and state already exists
+    SELECT university_id INTO new_univ_id
+    FROM university
+    WHERE name = p_name AND state = p_state
+    LIMIT 1;
+
+    -- If found, signal an error
+    IF new_univ_id IS NOT NULL THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Error: University with that name already exists.';
+            SET MESSAGE_TEXT = 'Error: University with that name and state already exists.';
+    ELSE
+        -- Insert the new university (wiki_url can be NULL)
+        INSERT INTO university (name, state, wiki_url)
+        VALUES (p_name, p_state, p_wiki_url);
+
+        -- Get the newly inserted university_id
+        SET new_univ_id = LAST_INSERT_ID();
     END IF;
-
-    -- Insert the new university
-    INSERT INTO university (name)
-    VALUES (p_name);
-
-    -- Get the inserted id
-    SET new_univ_id = LAST_INSERT_ID();
 
     -- Return the new id
     SELECT new_univ_id AS university_id;
@@ -27,44 +35,46 @@ DELIMITER ;
 
 -- This Procedure doesn't account for universities with the same name if they exist in the database
 DELIMITER $$
-CREATE PROCEDURE RemoveUniversity(IN p_university_name VARCHAR(100))
+CREATE PROCEDURE RemoveUniversity(
+    IN p_name VARCHAR(100),
+    IN p_state VARCHAR(50)
+)
 BEGIN
-    DECLARE v_university_id INT;
+    DECLARE univ_id INT;
 
-    -- Try to find the university by name (case-insensitive)
-    SELECT university_id
-    INTO v_university_id
-    FROM university
-    WHERE LOWER(name) = LOWER(p_university_name)
-    LIMIT 1;
+    -- Get the university ID using the existing function
+    SET univ_id = GetUniversityIDByNameAndState(p_name, p_state);
 
-    -- If no record found
-    IF v_university_id IS NULL THEN
-        SELECT CONCAT('No university found with name "', p_university_name, '".') AS message;
+    -- If the university doesn't exist, raise an error
+    IF univ_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: University not found for the given name and state.';
     ELSE
-        -- Delete the university record
-        DELETE FROM university WHERE university_id = v_university_id;
+        -- Delete the university (cascade will handle related records)
+        DELETE FROM university WHERE university_id = univ_id;
 
-        SELECT CONCAT('University "', p_university_name, '" has been removed successfully.') AS message;
+        -- Confirm deletion
+        SELECT CONCAT('University "', p_name, '" in ', p_state, ' has been removed.') AS message;
     END IF;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE AddCampus(
     IN p_campus_name VARCHAR(100),
-    IN p_university_name VARCHAR(100)
+    IN p_university_name VARCHAR(100),
+    IN p_state VARCHAR(50)
 )
 BEGIN
     DECLARE v_university_id INT;
 
     -- Step 1: Lookup university_id using the existing function
-    SET v_university_id = GetUniversityIDByName(p_university_name);
+    SET v_university_id = GetUniversityIDByNameAndState(p_university_name, p_state);
 
     -- Step 2: Check if university exists
     IF v_university_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Error: Specified university does not exist.';
+            SET MESSAGE_TEXT = 'Error: Specified university does not exist for the given name and state.';
     END IF;
 
     -- Step 3: Check if campus already exists for this university
@@ -77,12 +87,12 @@ BEGIN
             SET MESSAGE_TEXT = 'Error: Campus already exists for this university.';
     END IF;
 
-    -- Step 4: Insert the campus
+    -- Step 4: Insert the new campus
     INSERT INTO campus (campus_name, university_id)
     VALUES (p_campus_name, v_university_id);
 
     -- Step 5: Return success message
-    SELECT CONCAT('Campus "', p_campus_name, '" added to university "', p_university_name, '".') AS message;
+    SELECT CONCAT('Campus "', p_campus_name, '" added to university "', p_university_name, '" (', p_state, ').') AS message;
 END$$
 DELIMITER ;
 
