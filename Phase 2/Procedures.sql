@@ -1,5 +1,9 @@
 -- Procedures, Make sure to run the functions first before the procedures.
 
+-- ===========================================
+-- START OF ADMIN PROCEDURES
+-- ===========================================
+
 DELIMITER $$
 CREATE PROCEDURE CreateUniversity(
     IN p_name VARCHAR(100),
@@ -372,29 +376,33 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- ===========================================
+-- END OF ADMIN PROCEDURES
+-- ===========================================
+
+-- ===========================================
+-- START OF USER PROCEDURES
+-- ===========================================
 
 DELIMITER $$
 CREATE PROCEDURE CreateUser(
     IN p_username VARCHAR(50),
     IN p_password VARCHAR(255),
     IN p_role VARCHAR(10),
-    IN p_university_name VARCHAR(100)
+    IN p_university_name VARCHAR(100),
+    IN p_state VARCHAR(50)
 )
 BEGIN
-    DECLARE new_uid INT;
     DECLARE univ_id INT;
+    DECLARE new_uid INT;
 
-    -- Step 1: Find the university_id by name
-    SELECT university_id
-    INTO univ_id
-    FROM university
-    WHERE name = p_university_name
-    LIMIT 1;
+    -- Step 1: Get university ID using your function
+    SET univ_id = GetUniversityIDByNameAndState(p_university_name, p_state);
 
     -- Step 2: Handle missing university
     IF univ_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Error: Specified university does not exist.';
+            SET MESSAGE_TEXT = 'Error: The specified university and state do not exist.';
     END IF;
 
     -- Step 3: Check for duplicate username
@@ -403,21 +411,20 @@ BEGIN
             SET MESSAGE_TEXT = 'Error: Username already exists.';
     END IF;
 
-    -- Step 4: Validate role
+    -- Step 4: Validate role input
     IF p_role NOT IN ('Student', 'Faculty', 'Visitor') THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Error: Invalid role. Must be Student, Faculty, or Visitor.';
     END IF;
 
-    -- Step 5: Insert the user record
+    -- Step 5: Insert user
     INSERT INTO users (username, password, university_id, role)
     VALUES (p_username, p_password, univ_id, p_role);
 
-    -- Step 6: Retrieve the new UID
+    -- Step 6: Return new user_id
     SET new_uid = LAST_INSERT_ID();
-
-    -- Step 7: Return the UID
     SELECT new_uid AS user_id;
+
 END$$
 DELIMITER ;
 
