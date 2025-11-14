@@ -52,7 +52,7 @@ CREATE TABLE rooms (
 CREATE TABLE users (
     uid INT AUTO_INCREMENT PRIMARY KEY,      -- auto-incrementing unique ID  #(Ahmad): modified it to INT auto increment primary key becase it was casueing problems with UID in ratings
     username VARCHAR(50) NOT NULL UNIQUE,    -- must be unique
-    password VARCHAR(255) NOT NULL,          -- store hashed passwords!
+    password VARCHAR(255) NOT NULL,
     university_id INT NOT NULL,
     role VARCHAR(10) NOT NULL CHECK (role IN ('Student', 'Faculty', 'Visitor')),
     FOREIGN KEY (university_id) REFERENCES university(university_id) ON DELETE CASCADE -- use university_id as foreign key to ensure unique references
@@ -62,15 +62,16 @@ CREATE TABLE ratings (
     RID INT AUTO_INCREMENT PRIMARY KEY,
     score INT NOT NULL CHECK (score BETWEEN 1 AND 10),
     date DATE DEFAULT (CURRENT_DATE),
-    noise INT CHECK (noise BETWEEN 1 AND 5), 							-- 1 is silent, 5 is loud
-    cleanliness INT CHECK (cleanliness BETWEEN 1 AND 5),				-- 1 is clean, 5 is very dirty
-    equipment_quality INT CHECK (equipment_quality BETWEEN 1 AND 3),	-- 1 = great, 2 = okay, 3 = bad
-    wifi_strength INT CHECK (wifi_strength BETWEEN 1 AND 3),			-- 1 = great, 2 = okay, 3 = bad
-    extra_comments VARCHAR(2000),										-- there is no clob in mySQL so I decided to use Varchar that holds 2000 characters
+    noise INT CHECK (noise BETWEEN 1 AND 5),                           -- 1 is silent, 5 is loud
+    cleanliness INT CHECK (cleanliness BETWEEN 1 AND 5),               -- 1 is clean, 5 is very dirty
+    equipment_quality INT CHECK (equipment_quality BETWEEN 1 AND 3),   -- 1 = great, 2 = okay, 3 = bad
+    wifi_strength INT CHECK (wifi_strength BETWEEN 1 AND 3),           -- 1 = great, 2 = okay, 3 = bad
+    extra_comments VARCHAR(2000),                                      -- using varchar since MySQL doesn't have CLOB
     UID INT NOT NULL,
-    FOREIGN KEY (UID) REFERENCES users(uid) ON DELETE CASCADE, 	-- if a user is deleted, all their ratings are automatically deleted.
     LID INT NOT NULL,
-    FOREIGN KEY (LID) REFERENCES location(LID) ON DELETE CASCADE -- if a location is deleted, all their ratings are automatically deleted.
+    FOREIGN KEY (UID) REFERENCES users(uid) ON DELETE CASCADE,         -- deleting user deletes ratings
+    FOREIGN KEY (LID) REFERENCES location(LID) ON DELETE CASCADE,      -- deleting location deletes ratings
+    UNIQUE KEY unique_user_location (UID, LID)                         -- ensures a user can only rate a location once
 );
 
 CREATE TABLE rating_equipment (
@@ -254,3 +255,17 @@ CREATE TABLE rating_accessibility (
     PRIMARY KEY (RID, accessibility_tag),
     FOREIGN KEY (RID) REFERENCES ratings(RID) ON DELETE CASCADE
 );
+
+CREATE TABLE room_requests (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    room_name VARCHAR(100) NOT NULL,
+    university_id INT NOT NULL,
+    campus_name VARCHAR(100) NOT NULL,
+    building_LID INT NOT NULL,
+    requested_by INT NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    FOREIGN KEY (university_id) REFERENCES university(university_id) ON DELETE CASCADE,
+    FOREIGN KEY (building_LID) REFERENCES buildings(LID) ON DELETE CASCADE,
+    FOREIGN KEY (requested_by) REFERENCES users(uid) ON DELETE CASCADE
+);
+
