@@ -1,4 +1,4 @@
-# Procedures, Make sure to run the functions first before the procedures.
+-- Procedures, Make sure to run the functions first before the procedures.
 
 DELIMITER $$
 CREATE PROCEDURE CreateUniversity(
@@ -33,9 +33,9 @@ BEGIN
 END$$
 DELIMITER ;
 
--- This Procedure doesn't account for universities with the same name if they exist in the database
+
 DELIMITER $$
-CREATE PROCEDURE RemoveUniversity(
+CREATE PROCEDURE DeleteUniversity(
     IN p_name VARCHAR(100),
     IN p_state VARCHAR(50)
 )
@@ -95,6 +95,283 @@ BEGIN
     SELECT CONCAT('Campus "', p_campus_name, '" added to university "', p_university_name, '" (', p_state, ').') AS message;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE DeleteCampus(
+    IN p_campus_name VARCHAR(100),
+    IN p_university_name VARCHAR(100),
+    IN p_state VARCHAR(50)
+)
+BEGIN
+    DECLARE v_university_id INT;
+
+    -- Step 1: Get the university ID
+    SET v_university_id = GetUniversityIDByNameAndState(p_university_name, p_state);
+
+    -- Step 2: If the university does not exist, throw an error
+    IF v_university_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: University with the given name and state does not exist.';
+    END IF;
+
+    -- Step 3: Check if the campus exists for this university
+    IF NOT EXISTS (
+        SELECT 1 FROM campus
+        WHERE campus_name = p_campus_name
+          AND university_id = v_university_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Campus not found for the specified university.';
+    END IF;
+
+    -- Step 4: Delete the campus
+    DELETE FROM campus
+    WHERE campus_name = p_campus_name
+      AND university_id = v_university_id;
+
+    -- Step 5: Confirm
+    SELECT CONCAT(
+        'Campus "', p_campus_name,
+        '" at university "', p_university_name,
+        '" (', p_state, ') has been deleted.'
+    ) AS message;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE CreateNonBuildingLocation(
+    IN p_name VARCHAR(100),
+    IN p_campus_name VARCHAR(100),
+    IN p_university_name VARCHAR(100),
+    IN p_state VARCHAR(50),
+    IN p_image LONGBLOB,      -- pass NULL if no image
+    IN p_description TEXT     -- pass NULL if no description
+)
+BEGIN
+    DECLARE v_univ_id INT;
+    DECLARE v_LID INT;
+
+    -- 1) Get university id
+    SET v_univ_id = GetUniversityIDByNameAndState(p_university_name, p_state);
+
+    IF v_univ_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: University not found for the given name and state.';
+    END IF;
+
+    -- 2) Ensure campus exists for this university
+    IF NOT EXISTS (
+        SELECT 1 FROM campus
+        WHERE campus_name = p_campus_name
+          AND university_id = v_univ_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Campus not found for the specified university.';
+    END IF;
+
+    -- 3) Prevent duplicate location (same name + campus + university)
+    IF EXISTS (
+        SELECT 1 FROM location
+        WHERE name = p_name
+          AND campus_name = p_campus_name
+          AND university_id = v_univ_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: A location with that name already exists on the specified campus.';
+    END IF;
+
+    -- 4) Insert into location
+    INSERT INTO location (name, image, campus_name, university_id)
+    VALUES (p_name, p_image, p_campus_name, v_univ_id);
+
+    SET v_LID = LAST_INSERT_ID();
+
+    -- 5) Insert into nonbuildings
+    INSERT INTO nonbuildings (LID, description)
+    VALUES (v_LID, p_description);
+
+    -- 6) Return the new LID
+    SELECT v_LID AS LID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE CreateBuildingLocation(
+    IN p_name VARCHAR(100),
+    IN p_campus_name VARCHAR(100),
+    IN p_university_name VARCHAR(100),
+    IN p_state VARCHAR(50),
+    IN p_image LONGBLOB      -- pass NULL if no image
+)
+BEGIN
+    DECLARE v_univ_id INT;
+    DECLARE v_LID INT;
+
+    -- 1) Get university id
+    SET v_univ_id = GetUniversityIDByNameAndState(p_university_name, p_state);
+
+    IF v_univ_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: University not found for the given name and state.';
+    END IF;
+
+    -- 2) Ensure campus exists for this university
+    IF NOT EXISTS (
+        SELECT 1 FROM campus
+        WHERE campus_name = p_campus_name
+          AND university_id = v_univ_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Campus not found for the specified university.';
+    END IF;
+
+    -- 3) Prevent duplicate location (same name + campus + university)
+    IF EXISTS (
+        SELECT 1 FROM location
+        WHERE name = p_name
+          AND campus_name = p_campus_name
+          AND university_id = v_univ_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: A location with that name already exists on the specified campus.';
+    END IF;
+
+    -- 4) Insert into location
+    INSERT INTO location (name, image, campus_name, university_id)
+    VALUES (p_name, p_image, p_campus_name, v_univ_id);
+
+    SET v_LID = LAST_INSERT_ID();
+
+    -- 5) Insert into buildings
+    INSERT INTO buildings (LID)
+    VALUES (v_LID);
+
+    -- 6) Return the new LID
+    SELECT v_LID AS LID;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE CreateRoom(
+    IN p_room_name VARCHAR(100),
+    IN p_building_name VARCHAR(100),
+    IN p_campus_name VARCHAR(100),
+    IN p_university_name VARCHAR(100),
+    IN p_state VARCHAR(50),
+    IN p_room_number VARCHAR(10),
+    IN p_room_type ENUM('study room', 'computer room', 'science lab', 'classroom', 'facility', 'meeting room', 'store', 'venue'),
+    IN p_room_size ENUM('small', 'medium', 'large'),
+    IN p_image LONGBLOB     -- pass NULL if no image
+)
+BEGIN
+    DECLARE v_univ_id INT;
+    DECLARE v_building_LID INT;
+    DECLARE v_LID INT;
+
+    -- 1) Get university id
+    SET v_univ_id = GetUniversityIDByNameAndState(p_university_name, p_state);
+
+    IF v_univ_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: University not found for the given name and state.';
+    END IF;
+
+    -- 2) Ensure campus exists
+    IF NOT EXISTS (
+        SELECT 1
+        FROM campus
+        WHERE campus_name = p_campus_name
+          AND university_id = v_univ_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Campus not found for the specified university.';
+    END IF;
+
+    -- 3) Find the building LID
+    SELECT LID INTO v_building_LID
+    FROM location
+    WHERE name = p_building_name
+      AND campus_name = p_campus_name
+      AND university_id = v_univ_id
+      AND LID IN (SELECT LID FROM buildings)   -- must be an actual building
+    LIMIT 1;
+
+    IF v_building_LID IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Specified building does not exist.';
+    END IF;
+
+    -- 4) Duplicate room check (same name OR same number within the same building)
+    IF EXISTS (
+        SELECT 1 FROM rooms
+        WHERE building_LID = v_building_LID
+          AND (
+               LID IN (SELECT LID FROM location WHERE name = p_room_name)
+               OR (p_room_number IS NOT NULL AND room_number = p_room_number)
+          )
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: A room with that name or number already exists in this building.';
+    END IF;
+
+    -- 5) Insert into location
+    INSERT INTO location (name, image, campus_name, university_id)
+    VALUES (p_room_name, p_image, p_campus_name, v_univ_id);
+
+    SET v_LID = LAST_INSERT_ID();
+
+    -- 6) Insert into rooms
+    INSERT INTO rooms (LID, building_LID, room_number, room_type, room_size)
+    VALUES (v_LID, v_building_LID, p_room_number, p_room_type, p_room_size);
+
+    -- 7) Return LID
+    SELECT v_LID AS LID;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE DeleteLocation(
+    IN p_location_name VARCHAR(100),
+    IN p_campus_name VARCHAR(100),
+    IN p_university_name VARCHAR(100),
+    IN p_state VARCHAR(50)
+)
+BEGIN
+    DECLARE v_univ_id INT;
+    DECLARE v_LID INT;
+
+    -- 1) Get the university ID
+    SET v_univ_id = GetUniversityIDByNameAndState(p_university_name, p_state);
+
+    IF v_univ_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: University not found for the specified name and state.';
+    END IF;
+
+    -- 2) Lookup the location LID (must match name + campus + university)
+    SELECT LID INTO v_LID
+    FROM location
+    WHERE name = p_location_name
+      AND campus_name = p_campus_name
+      AND university_id = v_univ_id
+    LIMIT 1;
+
+    IF v_LID IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: Location not found for the specified campus and university.';
+    END IF;
+
+    -- 3) Delete the location (CASCADE removes building/nonbuilding/rooms automatically)
+    DELETE FROM location WHERE LID = v_LID;
+
+    -- 4) Return success
+    SELECT CONCAT('Location "', p_location_name, '" was successfully deleted.') AS message;
+
+END$$
+DELIMITER ;
+
 
 DELIMITER $$
 CREATE PROCEDURE CreateUser(
