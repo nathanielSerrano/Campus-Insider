@@ -35,7 +35,7 @@ The `web-scraping/` directory contains the following:
 ## Launching the Database
 Here are the steps to launch the database for Campus Insider. This process includes defining the schema, functions, and procedures, as well as inserting data into the database. To begin, this is a MySQL database; as such, it is recommended to utilize MySQLWorkbench to manage the database, and our instructions are written with MySQLWorkbench in mind.
  * To start, once you've created a new connection in MySQLWorkbench, open and run `schema-implementation/Combined Campus Insider.sql` to create all tables within the database.
- * Next, open and run `Functions.sql` followed by `Procedures.sql` so that all functions and procedures are available to be used.
+ * Next, open and run `Functions.sql` followed by `Procedures.sql` and `indices.sql` so that all functions and procedures are available to be used.
 
 ## Web Scraping / Data Insertion
 Here are the steps to run the web scraping scripts as well as insert the data into the database. Note that the data these web scraping scripts output can be found in the `web-scraping/data/` directory. In addition, each of these web scraping scripts requires `BeautifulSoup` to be installed. If it isn't yet installed, run the command `pip install beautifulsoup4` in a virtual environment.
@@ -94,6 +94,7 @@ To insert data into the database, complete the steps listed below. It is importa
    * Task Supervisor: Nathaniel
    * Each member records and goes over the task they supervised.
    * Due Date: November 14, 2025
+
 
 
 
