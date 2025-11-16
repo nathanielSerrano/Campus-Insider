@@ -13,6 +13,7 @@ The work for phase 2 has been mostly organized into separate folders.
    
 The `web-scraping/` directory contains the following:
    * `data/` is a subdirectory that contains JSON files of data attained from web scraping. Any files with the word `clean` appended to the end of the name consist of data that has been modified to suit our database's needs.
+     * `Campus Insider - Data Sources & Cleaning.pdf` can be found within this directory. It is a document that describes the cleaning process and lists the sources used for web scraping.
    * `college_scrape.py` is a Python script that scrapes the following info on all American universities:
      * Name
      * State
@@ -93,6 +94,7 @@ To insert data into the database, complete the steps listed below. It is importa
    * Task Supervisor: Nathaniel
    * Each member records and goes over the task they supervised.
    * Due Date: November 14, 2025
+
 
 
 
