@@ -27,6 +27,9 @@ The `web-scraping/` directory contains the following:
    * `Campus Insider Stored Procedures and Functions Outline.pdf` is a PDF file that contains basic information outlining the procedures and functions utilized by the Campus Insider database.
    * `Functions.sql` contains any functions utilized by the Campus Insider database.
    * `Procedures.sql` contains any procedures utilized by the Campus Insider database.
+   * `indices.sql` contains any all index implementations for the Campus Insider database.
+   * `queryOptimization.pdf` is a document outlining how the efficiency of two queries was improved via the implementation of indices.
+   * `Campus Insider Phase 2 Contributions.pdf` is a document outlining the work that every member did on this phase of the project.
 
 ## Launching the Database
 Here are the steps to launch the database for Campus Insider. This process includes defining the schema, functions, and procedures, as well as inserting data into the database. To begin, this is a MySQL database; as such, it is recommended to utilize MySQLWorkbench to manage the database, and our instructions are written with MySQLWorkbench in mind.
@@ -90,6 +93,7 @@ To insert data into the database, complete the steps listed below. It is importa
    * Task Supervisor: Nathaniel
    * Each member records and goes over the task they supervised.
    * Due Date: November 14, 2025
+
 
 
 
