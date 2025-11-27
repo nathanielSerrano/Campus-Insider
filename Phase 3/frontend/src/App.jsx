@@ -1,0 +1,58 @@
+import { useEffect, useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './index.css'
+import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import UniversityInfo from "./pages/UniversityInfo";
+import LocationInfo from "./pages/LocationInfo";
+
+function App() {
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    fetch("/api/hello") // Test call to backend
+      .then(r => r.json())
+      .then(data => setMsg(data.message));
+  }, []);
+
+  return (
+    <>
+      <h1 className="text-3xl font-bold text-blue-500">
+        Welcome to Campus Insider!
+      </h1>
+      <p>Backend says: {msg}</p>
+      <br></br>
+      <button className="">
+        Search for a University 🔍
+      </button>
+      <Router>
+      <div className="min-h-screen p-6 rgb(47, 47, 47)">
+         {/* Navigation menu */}
+         <nav className="mb-6 space-x-4">
+           <Link to="/" className="text-blue-600 hover:underline">Login</Link>
+           <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
+           <Link to="/university" className="text-blue-600 hover:underline">University</Link>
+           <Link to="/location" className="text-blue-600 hover:underline">Location</Link>
+         </nav>
+
+         {/* Page content */}
+         <main>
+           <Routes>
+             <Route path="/" element={<Login />} />
+             <Route path="/register" element={<Register />} />
+             <Route path="/university" element={<UniversityInfo />} />
+             <Route path="/location" element={<LocationInfo />} />
+           </Routes>
+         </main>
+       </div>
+     </Router>
+    </>
+  );
+
+}
+ 
+export default App;

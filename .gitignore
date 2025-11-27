@@ -1,1 +1,41 @@
+# ---------------------------
+# Python / Flask
+# ---------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.DS_Store
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Flask instance or config (if used)
+instance/
+*.env
+*.local
+config.py
+
+# ---------------------------
+# Node / Vite / React
+# ---------------------------
+node_modules/
+dist/
+*.log
+
+# npm / pnpm / yarn integrity files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# ---------------------------
+# OS / Editor files
+# ---------------------------
 .DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
