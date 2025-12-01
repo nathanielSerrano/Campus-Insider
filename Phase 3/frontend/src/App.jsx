@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import UniversityInfo from "./pages/UniversityInfo";
 import LocationInfo from "./pages/LocationInfo";
+import SearchResults from './pages/SearchResults'
+import Ratings from './pages/Ratings';
 
 function App() {
   const [msg, setMsg] = useState("");
@@ -26,7 +28,7 @@ function App() {
       </h1>
       <p>Backend says: {msg}</p>
       <br></br>
-      <button className="">
+      <button onClick=" " className="">
         Search for a University 🔍
       </button>
       <Router>
@@ -37,6 +39,8 @@ function App() {
            <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
            <Link to="/university" className="text-blue-600 hover:underline">University</Link>
            <Link to="/location" className="text-blue-600 hover:underline">Location</Link>
+           <Link to="/search" className="text-blue-600 hover:underline">Search</Link>
+           <Link to="/ratings" className="text-blue-600 hover:underline">Ratings</Link>
          </nav>
 
          {/* Page content */}
@@ -46,6 +50,8 @@ function App() {
              <Route path="/register" element={<Register />} />
              <Route path="/university" element={<UniversityInfo />} />
              <Route path="/location" element={<LocationInfo />} />
+             <Route path="/search" element={<SearchResults />} />
+             <Route path="/ratings" element={<Ratings />} />
            </Routes>
          </main>
        </div>
