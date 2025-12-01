@@ -5,11 +5,25 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add login logic here
-    console.log("Email:", email, "Password:", password);
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+      console.log("Login response:", data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center rgb(47, 47, 47)">
@@ -48,7 +62,7 @@ const Login = () => {
             />
           </div>
 
-          <button
+          <button onClick={handleSubmit}
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
           >
