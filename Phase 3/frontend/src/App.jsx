@@ -28,10 +28,16 @@ function App() {
       </h1>
       <p>Backend says: {msg}</p>
       <br></br>
-      <button onClick=" " className="">
+      {/* <button onClick={() => navigate("/search")} className="">
         Search for a University 🔍
-      </button>
+      </button> */}
       <Router>
+
+<Link to="/search">
+  <button className="text-white">
+    Search for a University 🔍
+  </button>
+</Link>
       <div className="min-h-screen p-6 rgb(47, 47, 47)">
          {/* Navigation menu */}
          <nav className="mb-6 space-x-4">
@@ -43,12 +49,14 @@ function App() {
            <Link to="/ratings" className="text-blue-600 hover:underline">Ratings</Link>
          </nav>
 
+
+
          {/* Page content */}
          <main>
            <Routes>
              <Route path="/" element={<Login />} />
              <Route path="/register" element={<Register />} />
-             <Route path="/university" element={<UniversityInfo />} />
+             <Route path="/university/:name" element={<UniversityInfo />} />
              <Route path="/location" element={<LocationInfo />} />
              <Route path="/search" element={<SearchResults />} />
              <Route path="/ratings" element={<Ratings />} />
