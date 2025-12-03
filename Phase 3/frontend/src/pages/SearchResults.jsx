@@ -95,7 +95,6 @@ export default function SearchResults() {
     </label>
   </div>
 )}
-      {loading && <p>Loading...</p>}
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold mb-6 text-white">Search Results</h1>
   
@@ -126,6 +125,8 @@ export default function SearchResults() {
               </table>
             </div>
           </div>
+          {loading && <p>Loading...</p>}
+
         </div>
       </div>
     );

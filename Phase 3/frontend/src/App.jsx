@@ -11,6 +11,7 @@ import UniversityInfo from "./pages/UniversityInfo";
 import LocationInfo from "./pages/LocationInfo";
 import SearchResults from './pages/SearchResults'
 import Ratings from './pages/Ratings';
+import Home from './pages/Home';
 
 function App() {
   const [msg, setMsg] = useState("");
@@ -33,15 +34,12 @@ function App() {
       </button> */}
       <Router>
 
-<Link to="/search">
-  <button className="text-white">
-    Search for a University 🔍
-  </button>
-</Link>
+
       <div className="min-h-screen p-6 rgb(47, 47, 47)">
          {/* Navigation menu */}
          <nav className="mb-6 space-x-4">
-           <Link to="/" className="text-blue-600 hover:underline">Login</Link>
+           <Link to="/" className="text-blue-600 hover:underline">Home</Link>
+           <Link to="/login" className="text-blue-600 hover:underline">Login</Link>
            <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
            <Link to="/university" className="text-blue-600 hover:underline">University</Link>
            <Link to="/location" className="text-blue-600 hover:underline">Location</Link>
@@ -54,7 +52,8 @@ function App() {
          {/* Page content */}
          <main>
            <Routes>
-             <Route path="/" element={<Login />} />
+             <Route path="/" element={<Home />} />
+             <Route path="/login" element={<Login />} />
              <Route path="/register" element={<Register />} />
              <Route path="/university/:name" element={<UniversityInfo />} />
              <Route path="/location" element={<LocationInfo />} />
