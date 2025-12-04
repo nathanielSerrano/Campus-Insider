@@ -36,6 +36,8 @@ By default, Flask runs on `http://127.0.0.1:5000`. You can test an endpoint:
 2. Install frontend dependencies
     ```
     npm install
+    npm install -D @tailwindcss/postcss  
+    npm install lucide-react
     ```
 3. Run the development server
     ```
@@ -67,5 +69,6 @@ Fully Functionable Web App -- Due Thursday, December 4, 2025
    * Nathaniel
  * Flask Backend 
    * Ahmad
+
 
 
