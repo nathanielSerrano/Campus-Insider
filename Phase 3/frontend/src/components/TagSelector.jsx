@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
 export default function TagSelector({ selectedTags = [], setSelectedTags, placeholder, fetchUrl}) {
-    // Now selectedTags is guaranteed to be an array
     const [options, setOptions] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [suggestions, setSuggestions] = useState([]);
@@ -41,7 +40,7 @@ export default function TagSelector({ selectedTags = [], setSelectedTags, placeh
         <div className="flex flex-wrap gap-1">
           {selectedTags.map(tag => (
             <div key={tag} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1">
-              {tag} <button className="text-red-500" onClick={() => removeTag(tag)}>&times;</button>
+              {tag} <button className="text-red-500 px-2 m-0 bg-blue-100" onClick={() => removeTag(tag)}>&times;</button>
             </div>
           ))}
         </div>
@@ -53,7 +52,7 @@ export default function TagSelector({ selectedTags = [], setSelectedTags, placeh
           className="border px-2 py-1 rounded w-full"
         />
         {suggestions.length > 0 && (
-          <ul className="border rounded bg-white mt-1 max-h-32 overflow-auto">
+          <ul className="border rounded bg-gray-600 mt-1 max-h-32 overflow-auto">
             {suggestions.map(tag => (
               <li
                 key={tag}
