@@ -14,9 +14,9 @@ def get_db():
     if 'db' not in g:
         g.db = mysql.connector.connect(
             host="localhost",
-            user="root",
-            password="XQR89112@#24!>Du",
-            database="ROOZBASE"
+            user="app_rw",
+            password="[your password]",
+            database="campus_insider"
         )
     return g.db
 
