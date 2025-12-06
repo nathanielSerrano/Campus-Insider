@@ -12,7 +12,6 @@ import LocationInfo from "./pages/LocationInfo";
 import SearchResults from './pages/SearchResults'
 import Ratings from './pages/Ratings';
 import Home from './pages/Home';
-import AddRating from './pages/addRating';
 
 function App() {
 
@@ -53,7 +52,6 @@ function App() {
              <Route path="/location" element={<LocationInfo />} />
              <Route path="/search" element={<SearchResults />} />
              <Route path="/ratings" element={<Ratings />} />
-             <Route path="/addRating" element={<AddRating />} />
            </Routes>
          </main>
        </div>
