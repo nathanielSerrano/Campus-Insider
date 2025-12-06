@@ -14,9 +14,9 @@ def get_db():
     if 'db' not in g:
         g.db = mysql.connector.connect(
             host="localhost",
-            user="app_rw",
-            password="[your password]",
-            database="campus_insider"
+            user="root",
+            password="XQR89112@#24!>Du",
+            database="ROOZBASE"
         )
     return g.db
 
@@ -410,6 +410,187 @@ def api_request_room():
         cur.close()
         conn.close()
 
+@app.route("/api/reviews", methods=["GET"])
+def get_reviews():
+    """Fetch all ratings for a given location and university."""
+    location_name = request.args.get("location")
+    university_name = request.args.get("university")
+
+    if not location_name or not university_name:
+        return jsonify({"error": "Missing location or university"}), 400
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    sql = """
+    SELECT 
+        r.RID,
+        u.username,
+        r.score,
+        r.noise,
+        r.cleanliness,
+        r.equipment_quality,
+        r.wifi_strength,
+        r.extra_comments AS comment,
+        r.date
+    FROM ratings r
+    JOIN users u ON r.UID = u.uid
+    JOIN location l ON r.LID = l.LID
+    JOIN university uni ON l.university_id = uni.university_id
+    WHERE l.name = %s AND uni.name = %s
+    ORDER BY r.date DESC
+    """
+
+    cursor.execute(sql, (location_name, university_name))
+    reviews = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return jsonify({"reviews": reviews})
+
+
+@app.route("/api/addReview", methods=["POST"])
+def add_review():
+    """Add a new rating for a location."""
+    data = request.get_json()
+    required_fields = ["username", "score", "noise", "cleanliness", "equipment_quality", "wifi_strength", "location", "university"]
+
+    # Check for missing fields
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing fields"}), 400
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        # Find user ID
+        cursor.execute("SELECT uid FROM users WHERE username = %s", (data["username"],))
+        user_row = cursor.fetchone()
+        if not user_row:
+            return jsonify({"error": "User not found"}), 404
+        uid = user_row["uid"]
+
+        # Find location ID
+        cursor.execute("""
+            SELECT l.LID 
+            FROM location l
+            JOIN university u ON l.university_id = u.university_id
+            WHERE l.name = %s AND u.name = %s
+        """, (data["location"], data["university"]))
+        loc_row = cursor.fetchone()
+        if not loc_row:
+            return jsonify({"error": "Location not found"}), 404
+        lid = loc_row["LID"]
+
+        # Insert review
+        cursor.execute("""
+            INSERT INTO ratings (score, noise, cleanliness, equipment_quality, wifi_strength, extra_comments, UID, LID, date)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            data["score"],
+            data["noise"],
+            data["cleanliness"],
+            data["equipment_quality"],
+            data["wifi_strength"],
+            data.get("comment", ""),
+            uid,
+            lid,
+            datetime.now().date()
+        ))
+
+        conn.commit()
+        return jsonify({"message": "Review added successfully"})
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": str(err)}), 400
+
+    finally:
+        cursor.close()
+        conn.close()
+        
+@app.route("/api/locationRatings")
+def location_ratings():
+    location_name = request.args.get("location", "")
+    university_name = request.args.get("university", "")
+    room_param = request.args.get("room", "")  # extra param used by university page
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    # -----------------------------------------
+    # Get location info
+    # -----------------------------------------
+    cursor.execute(
+        """
+        SELECT L.LID,
+               L.name AS location_name,
+               CASE
+                   WHEN B.LID IS NOT NULL THEN 'Building'
+                   WHEN NB.LID IS NOT NULL THEN 'Non-building'
+                   ELSE 'Room'
+               END AS location_type,
+               U.name AS university_name
+        FROM location L
+        LEFT JOIN buildings B ON L.LID = B.LID
+        LEFT JOIN nonbuildings NB ON L.LID = NB.LID
+        JOIN university U ON L.university_id = U.university_id
+        WHERE (
+                 L.name = %s
+              OR L.name = %s
+              OR REPLACE(L.name, ' - Room ', ' ') = %s
+              )
+          AND U.name = %s
+        """,
+        (
+            location_name,      # matches raw "BEH 1000" or "BEH - Room 1000"
+            room_param,         # matches exact room long-format name
+            location_name,      # matches translated short version
+            university_name,
+        )
+    )
+
+    location_info = cursor.fetchone()
+
+    if not location_info:
+        cursor.close()
+        return {"location": None, "ratings": []}
+
+    lid = location_info["LID"]
+
+    # -----------------------------------------
+    # Get ratings for this location
+    # -----------------------------------------
+    cursor.execute(
+        """
+        SELECT R.RID,
+               U.username AS user_type,
+               R.score,
+               R.noise,
+               R.cleanliness,
+               R.equipment_quality,
+               R.wifi_strength,
+               R.extra_comments AS comment,
+               GROUP_CONCAT(DISTINCT RE.equipment_tag) AS tags_equipment,
+               GROUP_CONCAT(DISTINCT RE2.accessibility_tag) AS tags_accessibility
+        FROM ratings R
+        JOIN users U ON R.UID = U.uid
+        LEFT JOIN rating_equipment RE ON R.RID = RE.RID
+        LEFT JOIN rating_accessibility RE2 ON R.RID = RE2.RID
+        WHERE R.LID = %s
+        GROUP BY R.RID
+        """,
+        (lid,)
+    )
+    
+    ratings = cursor.fetchall()
+
+    # Convert comma-separated tags → arrays
+    for r in ratings:
+        r["tags_equipment"] = r["tags_equipment"].split(",") if r["tags_equipment"] else []
+        r["tags_accessibility"] = r["tags_accessibility"].split(",") if r["tags_accessibility"] else []
+
+    cursor.close()
+    return {"location": location_info, "ratings": ratings}
 
 
 if __name__ == '__main__':
