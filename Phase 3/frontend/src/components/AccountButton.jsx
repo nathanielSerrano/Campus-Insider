@@ -66,7 +66,7 @@ export default function AccountButton() {
             bg-slate-800/90 text-white
             rounded-xl shadow-xl border border-white/20
             backdrop-blur-md
-            p-4 w-40
+            p-4 w-auto max-w min-w-40
             animate-slideDown
             z-50
           "
