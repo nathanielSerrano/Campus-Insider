@@ -23,3 +23,11 @@ ON users (university_id, username);
 -- to speed up rating searches
 CREATE INDEX idx_ratings_UID_LID
 ON ratings (UID, LID);
+
+-- Speed up joins between locations and rooms
+CREATE INDEX idx_rooms_LID ON rooms (LID);
+
+-- Speed up joins between locations and buildings
+CREATE INDEX idx_buildings_LID ON buildings (LID);
+
+
