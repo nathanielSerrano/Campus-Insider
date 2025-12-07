@@ -40,15 +40,16 @@ function Home() {
                             Sign Up
                         </button>
                     </Link>
+
                 </div>
             )}
-
-            {/* placeholder for when user is signed in */}
             {signedIn && (
 
-                <div className="absolute top-6 right-6 flex gap-4">
+                <div className="absolute top-6 right-6 z-50 flex gap-4">
                     <AccountButton />
                 </div>)}
+
+
 
             {/* Main card */}
             <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl max-w-xl text-center">

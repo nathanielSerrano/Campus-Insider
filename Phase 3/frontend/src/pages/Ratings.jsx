@@ -1,11 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, ArrowLeft } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import AccountButton from "../components/AccountButton";
 
 const Ratings = () => {
+
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+
 
   const locationName = searchParams.get("location");
   const universityName = searchParams.get("university");
@@ -17,7 +22,7 @@ const Ratings = () => {
   const [showForm, setShowForm] = useState(false); // <-- NEW
 
   const [newReview, setNewReview] = useState({
-    username: localStorage.getItem("username test") || "",
+    username: user.email || "",
     score: 5,
     noise: 3,
     cleanliness: 3,
@@ -52,7 +57,7 @@ const Ratings = () => {
   const handleSubmitReview = (e) => {
     e.preventDefault();
 
-    const username = localStorage.getItem("username");
+    const username = user.email;
     if (!username) {
       navigate("/register");
       return;
@@ -77,7 +82,7 @@ const Ratings = () => {
         // Server MUST return user role in `data.role`
         const newEntry = {
           ...payload,
-          role: data.role, // <-- NEW
+          role: user.role, // <-- NEW
         };
 
         setRatings([newEntry, ...ratings]);
@@ -102,7 +107,7 @@ const Ratings = () => {
   if (loading) return <div className="text-white p-4">Loading...</div>;
   if (!locationInfo)
     return <div className="text-red-500 p-4">Location not found.</div>;
-
+  console.log(locationInfo);
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 p-8 flex justify-center">
 
@@ -119,13 +124,14 @@ const Ratings = () => {
       >
         <Home className="w-6 h-6" />
       </button>
+      <AccountButton />
 
       <div className="max-w-5xl w-full backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl text-white">
         
         {/* Header */}
         <h1 className="text-4xl font-bold mb-2">{locationName}</h1>
         <p className="text-xl mb-4 text-slate-300">
-          {universityName} | Type: {locationInfo.location_type} | Campus:{" "}
+          {universityName} | Type:{" "} {locationInfo.location_type} | Campus: {" "}
           {locationInfo.campus_name} | Building:{" "}
           {locationInfo.building_name || "-"}
         </p>

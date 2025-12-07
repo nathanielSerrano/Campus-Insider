@@ -3,6 +3,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const [role, setRole] = useState(() => {
+    // Load existing role from localStorage
+    const savedRole = localStorage.getItem("role");
+    return savedRole ? savedRole : "visitor";
+  });
   const [user, setUser] = useState(() => {
     // Load existing login from localStorage
     const saved = localStorage.getItem("user");
@@ -20,7 +25,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, role, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

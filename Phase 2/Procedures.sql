@@ -851,7 +851,8 @@ BEGIN
 
     -- Step 2: Build dynamic SQL
     SET @sql = CONCAT(
-        'SELECT L.name AS location_name,
+        'SELECT L.LID,
+				L.name AS location_name,
                 C.campus_name,
                 U.username AS rated_by,
                 R.score,

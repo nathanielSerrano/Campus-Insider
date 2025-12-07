@@ -76,31 +76,8 @@ const UniversityInfo = () => {
     navigate(`/location?university=${encodeURIComponent(uni.name)}&state=${encodeURIComponent(uni.state)}`);
   };
   const handleRowClick = (loc, university) => {
-    // 1) prefer db_location_name when backend provides it
-    let trueLocation = loc.db_location_name || "";
-
-    // 2) if not provided, try to normalize the display name:
-    //    "BEH - Room 1000"  => "BEH 1000"
-    //    "BEH - Room 1000 (something)" -> still try to replace first occurrence
-    if (!trueLocation && loc.location_name) {
-      // Replace " - Room " with " " (single space)
-      if (loc.location_name.includes(" - Room ")) {
-        trueLocation = loc.location_name.replace(" - Room ", " ");
-      } else {
-        // fallback: remove " - " but only if it looks like <building> - <room>
-        // we'll conservatively replace " - " with " " if it contains numbers
-        const maybe = loc.location_name.replace(" - ", " ");
-        if (/\d/.test(maybe)) {
-          trueLocation = maybe;
-        } else {
-          // last resort: use the raw display name (backend has tolerant checks)
-          trueLocation = loc.location_name;
-        }
-      }
-    }
-
-    // If still empty (shouldn't happen) fall back to location_name
-    if (!trueLocation) trueLocation = loc.location_name || "";
+    
+    let trueLocation = loc.unformatted_name
 
     // Build URL: include the display label in &room for the backend as extra help
     const url =
@@ -127,7 +104,7 @@ const UniversityInfo = () => {
       state: uni.state,
       campus_name: campusName,
       building_name: locationType === "Room" ? buildingName : null,
-      requested_by_username: localStorage.getItem("username"),
+      requested_by_username: user.email,
       location_type: locationType, // Added for frontend logic, backend optional
     };
   
@@ -388,7 +365,7 @@ const UniversityInfo = () => {
       Admin Location Management
     </h2>
     <button
-      // onClick={() => navigate(`/admin/locations?university=${encodeURIComponent(uni.name)}&state=${encodeURIComponent(uni.state)}`)}
+      onClick={() => navigate(`/admin/`)}
       className="
         px-5 py-3 bg-red-500 hover:bg-red-600
         text-white rounded-xl font-medium transition
