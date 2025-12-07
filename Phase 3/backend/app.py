@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request, g
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from datetime import datetime
 import mysql.connector
+
 
 
 bcrypt = Bcrypt()
@@ -452,62 +454,68 @@ def get_reviews():
 @app.route("/api/addReview", methods=["POST"])
 def add_review():
     """Add a new rating for a location."""
-    data = request.get_json()
-    required_fields = ["username", "score", "noise", "cleanliness", "equipment_quality", "wifi_strength", "location", "university"]
-
-    # Check for missing fields
-    if not all(field in data for field in required_fields):
-        return jsonify({"error": "Missing fields"}), 400
-
-    conn = get_db()
-    cursor = conn.cursor(dictionary=True)
-
     try:
-        # Find user ID
-        cursor.execute("SELECT uid FROM users WHERE username = %s", (data["username"],))
-        user_row = cursor.fetchone()
-        if not user_row:
-            return jsonify({"error": "User not found"}), 404
-        uid = user_row["uid"]
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid JSON"}), 400
 
-        # Find location ID
+        required_fields = [
+            "username", "score", "noise", "cleanliness",
+            "equipment_quality", "wifi_strength", "location", "university"
+        ]
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing fields"}), 400
+
+        conn = get_db()
+        cursor = conn.cursor(dictionary=True)
+
+        # Find user
+        cursor.execute("SELECT uid, role FROM users WHERE username = %s", (data["username"],))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        uid = user["uid"]
+        role = user["role"]
+
+        # Find location
         cursor.execute("""
             SELECT l.LID 
             FROM location l
             JOIN university u ON l.university_id = u.university_id
             WHERE l.name = %s AND u.name = %s
         """, (data["location"], data["university"]))
-        loc_row = cursor.fetchone()
-        if not loc_row:
+        loc = cursor.fetchone()
+        if not loc:
             return jsonify({"error": "Location not found"}), 404
-        lid = loc_row["LID"]
+        lid = loc["LID"]
 
         # Insert review
         cursor.execute("""
-            INSERT INTO ratings (score, noise, cleanliness, equipment_quality, wifi_strength, extra_comments, UID, LID, date)
+            INSERT INTO ratings 
+            (UID, LID, score, noise, cleanliness, equipment_quality, wifi_strength, extra_comments, date)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
-            data["score"],
-            data["noise"],
-            data["cleanliness"],
-            data["equipment_quality"],
-            data["wifi_strength"],
+            uid, lid,
+            data["score"], data["noise"], data["cleanliness"],
+            data["equipment_quality"], data["wifi_strength"],
             data.get("comment", ""),
-            uid,
-            lid,
-            datetime.now().date()
+            datetime.now()
         ))
-
         conn.commit()
-        return jsonify({"message": "Review added successfully"})
 
-    except mysql.connector.Error as err:
-        return jsonify({"error": str(err)}), 400
+        return jsonify({"message": "Review added successfully", "role": role, "username": data["username"]})
+
+    except Exception as e:
+        # Catch all other errors and return JSON instead of HTML
+        return jsonify({"error": str(e)}), 500
 
     finally:
-        cursor.close()
-        conn.close()
-        
+        try:
+            cursor.close()
+            conn.close()
+        except:
+            pass
+
 @app.route("/api/locationRatings")
 def location_ratings():
     location_name = request.args.get("location", "")
@@ -591,6 +599,39 @@ def location_ratings():
 
     cursor.close()
     return {"location": location_info, "ratings": ratings}
+
+
+#temp login route for testing
+@app.route("/api/login", methods=["POST"])
+def login_user():   # <-- changed function name
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"error": "Missing username or password"}), 400
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT username, password, role, university_id FROM users WHERE username = %s",
+        (username,)
+    )
+    user = cursor.fetchone()
+    cursor.close()
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if password != user["password"]:
+        return jsonify({"error": "Incorrect password"}), 401
+
+    return jsonify({
+        "message": "Login successful",
+        "username": user["username"],
+        "role": user["role"],
+        "university_id": user["university_id"]
+    })
 
 
 if __name__ == '__main__':

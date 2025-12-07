@@ -2,15 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Home } from "lucide-react";
 
-
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // will be used as username
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     try {
       const response = await fetch("/api/login", {
@@ -18,13 +19,29 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          username: email,  // use email as username
+          password,
+        }),
       });
 
       const data = await response.json();
       console.log("Login response:", data);
+
+      if (!response.ok) {
+        setError(data.error || "Login failed");
+        return;
+      }
+
+      // Save username and role in localStorage for later pages
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("role", data.role);
+
+      // Redirect to home or desired page
+      navigate("/");
     } catch (err) {
       console.error("Fetch error:", err);
+      setError("Network error, please try again.");
     }
   };
 
@@ -34,59 +51,34 @@ const Login = () => {
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
-        className="
-          absolute top-6 left-6
-          text-white text-lg
-          bg-white/10 hover:bg-white/20
-          px-4 py-2 rounded-xl
-          backdrop-blur-md border border-white/20
-          transition-all hover:scale-105
-        "
+        className="absolute top-6 left-6 text-white text-lg bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl backdrop-blur-md border border-white/20 transition-all hover:scale-105"
       >
         ← Back
       </button>
+
+      {/* Home button */}
       <button
         onClick={() => navigate("/")}
-        className="
-          absolute top-6 right-6
-          text-white
-          bg-white/10 hover:bg-white/20
-          p-3 rounded-xl
-          backdrop-blur-md border border-white/20
-          transition-all hover:scale-105
-          flex items-center justify-center
-        "
+        className="absolute top-6 right-6 text-white bg-white/10 hover:bg-white/20 p-3 rounded-xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 flex items-center justify-center"
       >
         <Home className="w-6 h-6" />
       </button>
 
       {/* Glass Card */}
-      <div className="
-        backdrop-blur-xl bg-white/10 border border-white/20
-        rounded-2xl p-10 shadow-2xl w-full max-w-md
-        text-white
-      ">
-        <h1 className="text-4xl font-bold text-center mb-6">
-          Login
-        </h1>
+      <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl w-full max-w-md text-white">
+        <h1 className="text-4xl font-bold text-center mb-6">Login</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Email */}
+          {/* Email / Username */}
           <div>
-            <label className="block text-white/80 mb-1">Email</label>
+            <label className="block text-white/80 mb-1">Email / Username</label>
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="
-                w-full px-4 py-3 rounded-xl 
-                bg-white/20 text-white 
-                placeholder-white/60
-                border border-white/30
-                focus:outline-none focus:ring-2 focus:ring-blue-400
-              "
-              placeholder="you@example.com"
+              className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter your username"
               required
               autoFocus
             />
@@ -100,48 +92,31 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="
-                  w-full px-4 py-3 rounded-xl
-                  bg-white/20 text-white
-                  placeholder-white/60
-                  border border-white/30
-                  focus:outline-none focus:ring-2 focus:ring-blue-400
-                "
+                className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="********"
                 required
               />
-
-              {/* Visibility toggle */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="
-                  absolute right-3 top-1/2 -translate-y-1/2
-                  text-white/70 hover:text-white transition
-                "
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition"
               >
-                {showPassword ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
-            </button>
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="
-              w-full py-3 text-lg font-medium
-              bg-blue-500 hover:bg-blue-600 
-              rounded-xl transition-all
-              shadow-lg shadow-blue-900/30
-              hover:scale-[1.03]
-            "
+            className="w-full py-3 text-lg font-medium bg-blue-500 hover:bg-blue-600 rounded-xl transition-all shadow-lg shadow-blue-900/30 hover:scale-[1.03]"
           >
             Login
           </button>
+
+          {/* Error Message */}
+          {error && <p className="text-red-400 mt-2 text-center">{error}</p>}
+
         </form>
 
         <p className="text-center text-white/70 text-sm mt-5">

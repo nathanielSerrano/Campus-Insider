@@ -17,7 +17,7 @@ const Ratings = () => {
   const [showForm, setShowForm] = useState(false); // <-- NEW
 
   const [newReview, setNewReview] = useState({
-    username: localStorage.getItem("ben2") || "",
+    username: localStorage.getItem("username test") || "",
     score: 5,
     noise: 3,
     cleanliness: 3,
