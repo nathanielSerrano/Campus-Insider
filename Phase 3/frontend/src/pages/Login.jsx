@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Home } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import AccountButton from "../components/AccountButton";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -8,6 +11,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
+  const { login } = useAuth();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,16 +34,21 @@ const Login = () => {
       console.log("Login response:", data);
 
       if (!response.ok) {
-        setError(data.error || "Login failed");
+        setError(data.error || "Login failed. Please try again.");
         return;
       }
 
       // Save username and role in localStorage for later pages
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("role", data.role);
+        // after successful registration/login:
+      login({
+        email: email,
+        university: data["university_id"],
+        role: data["role"],
+      });
+
 
       // Redirect to home or desired page
-      navigate("/");
+      navigate("/search");
     } catch (err) {
       console.error("Fetch error:", err);
       setError("Network error, please try again.");
@@ -63,6 +73,9 @@ const Login = () => {
       >
         <Home className="w-6 h-6" />
       </button>
+
+      <AccountButton />   {/* The new button */}
+
 
       {/* Glass Card */}
       <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl w-full max-w-md text-white">
