@@ -9,6 +9,7 @@ from datetime import datetime
 
 
 
+
 bcrypt = Bcrypt()
 
 app = Flask(__name__)
@@ -82,6 +83,7 @@ def register():
 
 @app.route("/api/search")
 def search():
+
     q = request.args.get("q", "")
     state = request.args.get("state", "")
 
@@ -104,6 +106,7 @@ def search():
     cursor.execute(sql, params)
     results = cursor.fetchall()
     cursor.close()
+
 
     return jsonify({"results": results})
 
@@ -225,6 +228,7 @@ ORDER BY L.name;
             "campuses": campuses,
             "locations": final_locations
         })
+    
 
     except mysql.connector.Error as err:
         return jsonify({"error": str(err)}), 500
@@ -504,7 +508,7 @@ def add_review():
             return jsonify({"error": "Missing fields"}), 400
 
         conn = get_db()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(dictionary=True, buffered=True)
 
         # Find user
         cursor.execute("SELECT uid, role FROM users WHERE username = %s", (data["username"],))
