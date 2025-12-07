@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom"
 import { Home, Search } from "lucide-react";
 import PaginatedTable from "../components/PaginatedTable";
+import AccountButton from "../components/AccountButton";
+import { useAuth } from "../context/AuthContext";
+
 
 
 const UniversityInfo = () => {
@@ -9,8 +12,9 @@ const UniversityInfo = () => {
   const { name } = useParams();
   const location = useLocation();
   // const user = localStorage.getItem("username");
-  const user = "admin"; // For testing admin features
-  const showAdminFeatures = user === "admin";
+  // const user = "admin"; // For testing admin features
+  const user = useAuth().user;
+  const showAdminFeatures = user && user.email === "admin";
 
   const [locationType, setLocationType] = useState("Room");
   const [locationName, setLocationName] = useState("");
@@ -72,9 +76,43 @@ const UniversityInfo = () => {
     navigate(`/location?university=${encodeURIComponent(uni.name)}&state=${encodeURIComponent(uni.state)}`);
   };
   const handleRowClick = (loc, university) => {
-    // Navigate to ratings page for this location
-    // Pass location_name and university as query params
-    navigate(`/ratings?location=${encodeURIComponent(loc.location_name)}&university=${encodeURIComponent(university)}`);
+    // 1) prefer db_location_name when backend provides it
+    let trueLocation = loc.db_location_name || "";
+
+    // 2) if not provided, try to normalize the display name:
+    //    "BEH - Room 1000"  => "BEH 1000"
+    //    "BEH - Room 1000 (something)" -> still try to replace first occurrence
+    if (!trueLocation && loc.location_name) {
+      // Replace " - Room " with " " (single space)
+      if (loc.location_name.includes(" - Room ")) {
+        trueLocation = loc.location_name.replace(" - Room ", " ");
+      } else {
+        // fallback: remove " - " but only if it looks like <building> - <room>
+        // we'll conservatively replace " - " with " " if it contains numbers
+        const maybe = loc.location_name.replace(" - ", " ");
+        if (/\d/.test(maybe)) {
+          trueLocation = maybe;
+        } else {
+          // last resort: use the raw display name (backend has tolerant checks)
+          trueLocation = loc.location_name;
+        }
+      }
+    }
+
+    // If still empty (shouldn't happen) fall back to location_name
+    if (!trueLocation) trueLocation = loc.location_name || "";
+
+    // Build URL: include the display label in &room for the backend as extra help
+    const url =
+      `/ratings?location=${encodeURIComponent(trueLocation)}` +
+      `&university=${encodeURIComponent(university)}` +
+      `&campus=${encodeURIComponent(loc.campus_name || "")}` +
+      `&room=${encodeURIComponent(loc.location_name || "")}`;
+
+    // debug (remove after verifying)
+    // console.log('navigate to', url, { loc });
+
+    navigate(url);
   };
 
   const handleSubmit = async (e) => {
@@ -122,6 +160,7 @@ const UniversityInfo = () => {
   const columns = [
     { label: "Location Name", key: "location_name" },
     { label: "Type", key: "location_type" },
+    { label: "Campus", key: "campus_name" },
   ];
 
   const typeRequiresBuilding = locationType === "Room";
@@ -131,8 +170,8 @@ const UniversityInfo = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 p-8 flex justify-center">
-      {/* Back Button */}
+<div className="relative z-40 min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 p-8 flex justify-center">
+{/* Back Button */}
       <button
         onClick={() => navigate(-1)}
         className="
@@ -162,6 +201,7 @@ const UniversityInfo = () => {
       >
         <Home className="w-6 h-6" />
       </button>
+      <AccountButton /> 
       <div className="max-w-4xl w-full backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl text-white">
 
 
@@ -357,6 +397,7 @@ const UniversityInfo = () => {
     >
       Manage Locations
     </button>
+    
   </div>
 )}
           </div>

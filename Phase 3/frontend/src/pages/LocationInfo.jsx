@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import TagSelector from "../components/TagSelector";
 import { Home, Search, SlidersHorizontal } from "lucide-react";
 import PaginatedTable from "../components/PaginatedTable";
+import AccountButton from "../components/AccountButton";
+
 
 const LocationSearch = () => {
   const location = useLocation();
@@ -166,6 +168,7 @@ const LocationSearch = () => {
       >
         <Home className="w-6 h-6" />
       </button>
+      <AccountButton />
       <div className="max-w-5xl w-full backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl text-white">
 
 

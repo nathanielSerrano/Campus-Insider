@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { Eye, EyeOff, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
@@ -11,12 +11,115 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  // University search state
+  const [universityQuery, setUniversityQuery] = useState("");
+  const [universityResults, setUniversityResults] = useState([]);
+  const [selectedUniversity, setSelectedUniversity] = useState(null);
+
+  // Role
+  const [role, setRole] = useState("student");
+
   const navigate = useNavigate();
+
+  // Hit /api/search as user types
+  const handleSearch = async (q) => {
+    setUniversityQuery(q);
+
+    if (!q.trim()) {
+      setUniversityResults([]);
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      setUniversityResults(data.results || []);
+    } catch (err) {
+      console.error("Search error:", err);
+    }
+  };
+
+  const handleUniversityChange = async (e) => {
+    const value = e.target.value;
+    setUniversityQuery(value);
+    setSelectedUniversity(null);  // reset selection
+  
+    if (!value.trim()) {
+      setUniversityResults([]);
+      return;
+    }
+  
+    const res = await fetch(`/api/search?q=${encodeURIComponent(value)}`);
+    const data = await res.json();
+    setUniversityResults(data.results || []);
+  };
+
+  const handleUniversitySelect = (uni) => {
+    setSelectedUniversity(uni);
+    setUniversityQuery(uni.university);  // autocomplete input
+    setUniversityResults([]);            // hide dropdown
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Submitting registration:", { email, password, confirmPassword });
+    if (!selectedUniversity) {
+      alert("Please select a valid university.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+    if (email === "" || password === "") {
+      alert("Email and password cannot be empty.");
+      return;
+    }
+    if (email.toLowerCase().includes("admin")) {
+      alert("Username cannot contain 'admin'.");
+      return;
+    }
+
+    console.log("Submitting registration:", {
+      email,
+      password,
+      confirmPassword,
+      role,
+      university: selectedUniversity,
+    });
+
+    // Continue with backend POST request...
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,  // use email as username
+          password,
+          role,
+          university: selectedUniversity.university,
+          state: selectedUniversity.state,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Registration response:", data);
+
+      if (!response.ok) {
+        alert(data.error || "Registration failed");
+        return;
+      }
+
+      // Redirect to login or desired page
+      navigate("/login");
+    } catch (err) {
+      console.error("Fetch error:", err);
+      alert("Network error, please try again.");
+    }
+
   };
 
   return (
@@ -36,6 +139,8 @@ const Register = () => {
       >
         ← Back
       </button>
+
+      {/* Home Button */}
       <button
         onClick={() => navigate("/")}
         className="
@@ -53,7 +158,7 @@ const Register = () => {
 
       {/* Glass Card */}
       <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-xl w-full max-w-md">
-        
+
         <h1 className="text-3xl font-bold text-white text-center mb-6">
           Create an Account
         </h1>
@@ -69,8 +174,7 @@ const Register = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="
                 w-full px-4 py-3 rounded-xl
-                bg-white/20 text-white
-                placeholder-white/60
+                bg-white/20 text-white placeholder-white/60
                 border border-white/30
                 focus:outline-none focus:ring-2 focus:ring-blue-400
               "
@@ -78,6 +182,79 @@ const Register = () => {
               required
               autoFocus
             />
+          </div>
+
+          {/* University Search */}
+          <div className="relative">
+            <label className="block text-white/80 mb-1">
+              University (Search & Select)
+            </label>
+
+            <input
+              type="text"
+              value={selectedUniversity ? selectedUniversity.university : universityQuery}
+              onChange={(e) => {
+                handleUniversityChange(e);
+                handleSearch(e.target.value);
+              }}
+              className="
+                w-full px-4 py-3 rounded-xl
+                bg-white/20 text-white placeholder-white/60
+                border border-white/30
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+              "
+              placeholder="Start typing to search..."
+              required
+            />
+
+            {/* Dropdown results */}
+{universityResults.length > 0 && !selectedUniversity && (
+  <div className="
+    absolute z-20 mt-2 w-full
+    bg-slate-800/90 backdrop-blur-xl
+    border border-white/20
+    rounded-xl shadow-xl
+    max-h-48 overflow-y-auto
+  ">
+    {universityResults.map((u, idx) => (
+      <button
+        type="button"
+        key={idx}
+        onClick={() => {
+          setSelectedUniversity(u);
+          setUniversityResults([]);
+        }}
+        className="
+          block w-full text-left px-4 py-2
+          text-white hover:bg-white/10
+          transition
+        "
+      >
+        {u.university} <span className="text-white/50">({u.state})</span>
+      </button>
+    ))}
+  </div>
+)}
+
+          </div>
+
+          {/* Role Selector */}
+          <div>
+            <label className="block text-white/80 mb-1">Your Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="
+                w-full px-4 py-3 rounded-xl
+                bg-white/20 text-white
+                border border-white/30
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+              "
+            >
+              <option value="student">Student</option>
+              <option value="faculty">Faculty</option>
+              <option value="visitor">Visitor</option>
+            </select>
           </div>
 
           {/* Password */}
@@ -90,8 +267,7 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="
                   w-full px-4 py-3 rounded-xl
-                  bg-white/20 text-white
-                  placeholder-white/60
+                  bg-white/20 text-white placeholder-white/60
                   border border-white/30
                   focus:outline-none focus:ring-2 focus:ring-blue-400
                 "
@@ -122,8 +298,7 @@ const Register = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="
                   w-full px-4 py-3 rounded-xl
-                  bg-white/20 text-white
-                  placeholder-white/60
+                  bg-white/20 text-white placeholder-white/60
                   border border-white/30
                   focus:outline-none focus:ring-2 focus:ring-blue-400
                 "

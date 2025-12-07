@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request, g
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 import mysql.connector
+import os
+from dotenv import load_dotenv
 
 
 bcrypt = Bcrypt()
@@ -10,12 +12,17 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
+load_dotenv()
+
+db_user = os.environ.get("DB_USER")
+db_password = os.environ.get("DB_PASSWORD")
+
 def get_db():
     if 'db' not in g:
         g.db = mysql.connector.connect(
             host="localhost",
-            user="app_rw",
-            password="[your password]",
+            user=db_user,
+            password=db_password,
             database="campus_insider"
         )
     return g.db
@@ -30,10 +37,45 @@ def close_db(exception=None):
 def index():
     return jsonify(message="Welcome to the Campus Insider API!")
 
-@app.route('/api/login')
+@app.route('/api/login', methods=['POST'])
 def login():
     # Dummy login endpoint for demonstration
-    return jsonify(message="Login endpoint - functionality to be implemented.")
+    # return jsonify(message="Login endpoint - functionality to be implemented.")
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    user = cursor.fetchone()
+    cursor.close()
+    if user and bcrypt.check_password_hash(user['password'], password):
+        return jsonify(message="Login successful", user={"username": user["username"], "role": user["role"], "university_id": user["university_id"]})
+    else:
+        return jsonify(message="Invalid username or password"), 401
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    role = data.get('role')
+    uni = data.get('university')
+    state = data.get('state')
+
+    password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    try:
+        cursor.callproc("CreateUser", [username, password_hash, role, uni, state])
+        conn.commit()
+        return jsonify(message="User registered successfully"), 201
+    except mysql.connector.Error as err:
+        return jsonify(message="Error registering user", error=str(err)), 400
+    finally:
+        cursor.close()
 
 @app.route("/api/search")
 def search():
@@ -393,7 +435,7 @@ def api_request_room():
             data["state"],
             data["campus_name"],
             data["building_name"],
-            "Benjamin",  # Placeholder for requester name
+            data["requested_by_username"],
         ])
 
         # Stored procedure returns a result set

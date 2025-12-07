@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SlidersHorizontal, Search, Home } from "lucide-react";
+import AccountButton from "../components/AccountButton";
+
 
 export default function SearchResults() {
   const navigate = useNavigate();
@@ -74,6 +76,7 @@ export default function SearchResults() {
       >
         <Home className="w-6 h-6" />
       </button>
+      <AccountButton /> 
 
       <div className="max-w-4xl mx-auto mt-12">
 
@@ -143,7 +146,7 @@ export default function SearchResults() {
                   border border-white/30
                   focus:outline-none focus:ring-2 focus:ring-blue-400
                 "
-                placeholder="e.g., CA"
+                placeholder="e.g., Maine"
               />
             </div>
           </div>
