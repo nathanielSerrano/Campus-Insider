@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom"
 import { Home, Search } from "lucide-react";
 import PaginatedTable from "../components/PaginatedTable";
+import AccountButton from "../components/AccountButton";
+import { useAuth } from "../context/AuthContext";
+
 
 
 const UniversityInfo = () => {
@@ -9,8 +12,9 @@ const UniversityInfo = () => {
   const { name } = useParams();
   const location = useLocation();
   // const user = localStorage.getItem("username");
-  const user = "admin"; // For testing admin features
-  const showAdminFeatures = user === "admin";
+  // const user = "admin"; // For testing admin features
+  const user = useAuth().user;
+  const showAdminFeatures = user && user.email === "admin";
 
   const [locationType, setLocationType] = useState("Room");
   const [locationName, setLocationName] = useState("");
@@ -166,8 +170,8 @@ const UniversityInfo = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 p-8 flex justify-center">
-      {/* Back Button */}
+<div className="relative z-40 min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 p-8 flex justify-center">
+{/* Back Button */}
       <button
         onClick={() => navigate(-1)}
         className="
@@ -197,6 +201,7 @@ const UniversityInfo = () => {
       >
         <Home className="w-6 h-6" />
       </button>
+      <AccountButton /> 
       <div className="max-w-4xl w-full backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl text-white">
 
 
@@ -392,6 +397,7 @@ const UniversityInfo = () => {
     >
       Manage Locations
     </button>
+    
   </div>
 )}
           </div>
