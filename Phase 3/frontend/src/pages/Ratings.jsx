@@ -21,8 +21,11 @@ const Ratings = () => {
   const [message, setMessage] = useState(null);
   const [showForm, setShowForm] = useState(false); // <-- NEW
 
+  const safeEmail = user?.email || "";   // ← fallback for non-logged in users
+
+
   const [newReview, setNewReview] = useState({
-    username: user.email || "",
+    username: safeEmail,
     score: 5,
     noise: 3,
     cleanliness: 3,
@@ -57,7 +60,7 @@ const Ratings = () => {
   const handleSubmitReview = (e) => {
     e.preventDefault();
 
-    const username = user.email;
+    const username = safeEmail;
     if (!username) {
       navigate("/register");
       return;
