@@ -5,9 +5,23 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 from datetime import datetime
+import pymysql
 
+load_dotenv()  # ⬅ loads .env file
 
+app = Flask(__name__)
+CORS(app)
 
+# Connect to DB
+def get_db_connection():
+    return pymysql.connect(
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
+        port=int(os.getenv("DB_PORT")),
+        cursorclass=pymysql.cursors.DictCursor
+    )
 
 
 bcrypt = Bcrypt()
@@ -656,6 +670,176 @@ AND U.name = %s
 
     cursor.close()
     return {"location": location_info, "ratings": ratings}
+
+############# ADMIN ENDPOINTS #############
+
+def is_admin(username):
+    """Helper: return True if user is admin."""
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT role FROM users WHERE username = %s", (username,))
+    row = cursor.fetchone()
+    cursor.close()
+    return row and row["role"] == "admin"
+
+
+@app.route("/api/admin/promote", methods=["POST"])
+def promote_user():
+    data = request.get_json()
+    requester = data.get("admin_username")
+    target = data.get("target_username")
+
+    if not is_admin(requester):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET role = 'admin' WHERE username = %s", (target,))
+    conn.commit()
+    cursor.close()
+
+    return jsonify({"message": f"{target} promoted to admin"})
+
+
+@app.route("/api/admin/demote", methods=["POST"])
+def demote_user():
+    data = request.get_json()
+    requester = data.get("admin_username")
+    target = data.get("target_username")
+
+    if not is_admin(requester):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET role = 'user' WHERE username = %s", (target,))
+    conn.commit()
+    cursor.close()
+
+    return jsonify({"message": f"{target} demoted to user"})
+
+
+@app.route("/api/admin/users", methods=["GET"])
+def admin_list_users():
+    admin = request.args.get("admin")
+
+    if not is_admin(admin):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT uid, username, role, university_id FROM users")
+    users = cursor.fetchall()
+    cursor.close()
+
+    return jsonify({"users": users})
+
+
+@app.route("/api/admin/universities", methods=["GET"])
+def admin_list_universities():
+    admin = request.args.get("admin")
+    if not is_admin(admin):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM university ORDER BY name")
+    universities = cursor.fetchall()
+    cursor.close()
+
+    return jsonify({"universities": universities})
+
+
+@app.route("/api/admin/addUniversity", methods=["POST"])
+def admin_add_university():
+    data = request.get_json()
+    admin = data.get("admin_username")
+
+    if not is_admin(admin):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    name = data.get("name")
+    state = data.get("state")
+    wiki = data.get("wiki_url", "")
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO university (name, state, wiki_url) VALUES (%s,%s,%s)",
+        (name, state, wiki)
+    )
+    conn.commit()
+    cursor.close()
+
+    return jsonify({"message": "University added"})
+
+
+@app.route("/api/admin/deleteUniversity", methods=["POST"])
+def admin_delete_university():
+    data = request.get_json()
+    admin = data.get("admin_username")
+
+    if not is_admin(admin):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    name = data.get("name")
+    state = data.get("state")
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Check if University exists
+    cursor.execute("""
+        SELECT university_id FROM university WHERE name = %s AND state = %s
+    """, (name, state))
+    row = cursor.fetchone()
+    if not row:
+        return jsonify({"error": "University not found"}), 404
+
+    uid = row[0]
+
+    # SAFETY CHECK: ensure no campus or location depends on it
+    cursor.execute("SELECT COUNT(*) FROM campus WHERE university_id = %s", (uid,))
+    if cursor.fetchone()[0] > 0:
+        return jsonify({"error": "Cannot delete: campuses still exist"}), 400
+
+    cursor.execute("DELETE FROM university WHERE university_id = %s", (uid,))
+    conn.commit()
+    cursor.close()
+
+    return jsonify({"message": "University deleted"})
+
+
+@app.route("/api/admin/addCampus", methods=["POST"])
+def admin_add_campus():
+    data = request.get_json()
+    admin = data.get("admin_username")
+
+    if not is_admin(admin):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    university = data.get("university")
+    state = data.get("state")
+    campus_name = data.get("campus_name")
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # find UID
+    cursor.execute("SELECT university_id FROM university WHERE name = %s AND state = %s",
+                   (university, state))
+    row = cursor.fetchone()
+    if not row:
+        return jsonify({"error": "University not found"}), 404
+
+    uid = row[0]
+
+    # Insert campus
+    cursor.execute("INSERT INTO campus (university_id, campus_name) VALUES (%s, %s)", (uid, campus_name))
+    conn.commit()
+    cursor.close()
+
+    return jsonify({"message": "Campus added"})
 
 
 #temp login route for testing

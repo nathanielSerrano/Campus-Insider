@@ -4,7 +4,6 @@ import { Eye, EyeOff, Home } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import AccountButton from "../components/AccountButton";
 
-
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState(""); // will be used as username
@@ -13,12 +12,25 @@ const Login = () => {
   const [error, setError] = useState(null);
   const { login } = useAuth();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
+      // Admin login bypass
+      if (email === "admin" && password === "admin") {
+        login({
+          email: "admin",
+          role: "admin",  // special role
+          university: null, // no university for admin
+        });
+
+        // Navigate to admin dashboard or page where admin can add universities
+        navigate("/admin");
+        return;
+      }
+
+      // Regular user login
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -38,14 +50,12 @@ const Login = () => {
         return;
       }
 
-      // Save username and role in localStorage for later pages
-        // after successful registration/login:
+      // Save username and role in context for later pages
       login({
         email: email,
         university: data["university_id"],
         role: data["role"],
       });
-
 
       // Redirect to home or desired page
       navigate("/search");
@@ -74,8 +84,7 @@ const Login = () => {
         <Home className="w-6 h-6" />
       </button>
 
-      <AccountButton />   {/* The new button */}
-
+      <AccountButton /> {/* The new button */}
 
       {/* Glass Card */}
       <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-10 shadow-2xl w-full max-w-md text-white">
