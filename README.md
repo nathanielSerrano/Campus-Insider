@@ -73,10 +73,6 @@ The application consists of:
  * MySQL 8
  * Normalized schema
 
-## Project Structure
-```
-
-```
 ## Installation (Linux)
 1. Clone the repository:
   ```
@@ -84,6 +80,11 @@ The application consists of:
   cd Campus-Insider
   ```
 2. Install dependencies & initialize DB
+Before running the installer, edit the `Phase 3/.env` file with the following information:
+  ```
+  DB_USER=root
+  DB_PASSWORD=[your MySQL root password]
+  ```
 Run the installer:
   ```
   cd "Phase 3"
