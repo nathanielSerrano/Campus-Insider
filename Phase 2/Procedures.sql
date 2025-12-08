@@ -3,6 +3,7 @@
 -- ===========================================
 -- START OF ADMIN PROCEDURES
 -- ===========================================
+use campus_insider;
 
 DELIMITER $$
 CREATE PROCEDURE CreateUniversity(

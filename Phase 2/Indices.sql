@@ -1,3 +1,4 @@
+use campus_insider;
 -- to speed up delete campus and procedures that check campus
 CREATE INDEX idx_campus_univ
 ON campus (university_id, campus_name);

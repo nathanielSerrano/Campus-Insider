@@ -4,13 +4,15 @@ import os
 import dotenv
 
 # Load environment variables from .env file
-dotenv.load_dotenv()
+dotenv.load_dotenv(dotenv_path=".env")
 db_user = os.getenv("DB_USER")
 db_password = os.getenv("DB_PASSWORD")
+print("DB_USER:", db_user)
+print("DB_PASSWORD:", "SET" if db_password else "EMPTY")
 
 
 # --- Step 1: Load JSON data ---
-INPUT = "data/US_Colleges.json"  # path to your JSON file
+INPUT = "../Phase 2/web-scraping/data/US_Colleges.json"  # path to your JSON file
 
 with open(INPUT, "r") as f:
     universities = json.load(f)
@@ -20,7 +22,7 @@ conn = mysql.connector.connect(
     host="localhost",
     user=db_user,      # replace with your username
     password=db_password,  # replace with your password
-    database="test_colleges"
+    database="campus_insider"
 )
 cursor = conn.cursor()
 

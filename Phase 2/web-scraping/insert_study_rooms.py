@@ -1,7 +1,14 @@
 import json
 import mysql.connector
+import os
+import dotenv
 
-INPUT = "[path to usm_study_rooms.json]"
+# Load environment variables from .env file
+dotenv.load_dotenv(dotenv_path=".env")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+
+INPUT = "../Phase 2/web-scraping/data/usm_study_rooms.json"
 
 # --- Step 1: Load your raw JSON data ---
 with open(INPUT, "r") as f:
@@ -10,8 +17,8 @@ with open(INPUT, "r") as f:
 # --- Step 2: Connect to MySQL ---
 conn = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="[your password]",
+    user=db_user,
+    password=db_password,
     database="campus_insider"
 )
 cursor = conn.cursor(buffered=True)

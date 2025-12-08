@@ -1,5 +1,5 @@
 -- Functions, run the functions first before the procedures since they are used by the them.
- 
+ use campus_insider;
 DELIMITER $$
 CREATE FUNCTION GetUniversityIDByNameAndState(
     p_name VARCHAR(100),

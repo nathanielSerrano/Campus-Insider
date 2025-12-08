@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS campus_insider;
+
 CREATE DATABASE campus_insider;
 USE campus_insider;
 
