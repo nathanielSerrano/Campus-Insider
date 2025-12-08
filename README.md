@@ -73,7 +73,7 @@ The application consists of:
  * MySQL 8
  * Normalized schema
 
-## Installation (Linux)
+## Installation (MacOS)
 1. Clone the repository:
   ```
   git clone https://github.com/nathanielSerrano/Campus-Insider.git
