@@ -34,13 +34,17 @@ export default function TagSelector({ selectedTags = [], setSelectedTags, placeh
     const removeTag = (tag) => {
       setSelectedTags(selectedTags.filter(t => t !== tag));
     };
+
+    function formatTag(tag) {
+      return tag.replace(/_/g, " ");
+    }
   
     return (
       <div className="space-y-1">
         <div className="flex flex-wrap gap-1">
           {selectedTags.map(tag => (
-            <div key={tag} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1">
-              {tag} <button className="text-red-500 px-2 m-0 bg-blue-100" onClick={() => removeTag(tag)}>&times;</button>
+            <div key={tag} className="bg-white/20 text-white px-2 py-1 rounded-full border border-white/30 flex items-center gap-1 backdrop-blur">
+            {tag} <button className="text-red-500 px-2 m-0 bg-inherit rounded border-white/30 backdrop-blur" onClick={() => removeTag(tag)}>&times;</button>
             </div>
           ))}
         </div>
@@ -59,7 +63,7 @@ export default function TagSelector({ selectedTags = [], setSelectedTags, placeh
                 className="px-2 py-1 hover:bg-gray-200 cursor-pointer"
                 onClick={() => addTag(tag)}
               >
-                {tag}
+                {formatTag(tag)}
               </li>
             ))}
           </ul>

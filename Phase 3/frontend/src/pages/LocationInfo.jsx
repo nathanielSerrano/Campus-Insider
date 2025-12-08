@@ -25,7 +25,12 @@ const LocationSearch = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-
+    const ratingFields = [
+    { label: "Noise Level", key: "noiseMax", min: 1, max: 5 },
+    { label: "Cleanliness Level", key: "cleanlinessMax", min: 1, max: 5 },
+    { label: "Equipment Quality", key: "equipment_qualityMax", min: 1, max: 3 },
+    { label: "WiFi Strength", key: "wifi_strengthMax", min: 1, max: 3 },
+  ];
 
   const [filters, setFilters] = useState({
     types: { Room: false, Building: false, NonBuilding: false },
@@ -44,9 +49,13 @@ const LocationSearch = () => {
     ratingFilters: {
       scoreMin: 1,
       scoreMax: 10,
+      noiseMin: 1,
       noiseMax: 5,
+      cleanlinessMin: 1,
       cleanlinessMax: 5,
+      equipment_qualityMin: 1,
       equipment_qualityMax: 3,
+      wifi_strengthMin: 1,
       wifi_strengthMax: 3,
     },
     searchByRating: false,
@@ -93,8 +102,31 @@ const LocationSearch = () => {
     }
 
     if (filters.searchByRating) {
-      const rf = filters.ratingFilters;
-      for (const key in rf) params.append(key, rf[key]);
+      // params.append("searchByRating", true);
+      // params.append("ratingMin", filters.ratingFilters.scoreMin);
+      // params.append("ratingMax", filters.ratingFilters.scoreMax);
+
+      // if (filters.searchByRating) {
+        params.append("searchByRating", true);
+        params.append("ratingType", "score"); // or whichever metric you want
+
+        const rf = filters.ratingFilters;
+        for (const key in rf) {
+          params.append(key, rf[key]);
+        }
+      
+
+      // Equipment tags
+      filters.selectedEquipmentTags.forEach(tag =>
+        params.append("equipmentTags", tag)
+      );
+
+      // Accessibility tags
+      filters.selectedAccessibilityTags.forEach(tag =>
+        params.append("accessibilityTags", tag)
+      );
+
+      console.log(params.toString());
     }
 
     const fetchResults = async () => {
@@ -333,75 +365,69 @@ const LocationSearch = () => {
 
             {/* Rating Filters */}
             {filters.searchByRating && (
-              <div className="border-t border-white/10 pt-4 space-y-6">
-                <h3 className="font-semibold text-lg">Rating Filters</h3>
+  <div className="border-t border-white/10 pt-4 space-y-6">
+    <h3 className="font-semibold text-lg">Rating Filters</h3>
 
-                {/* Score */}
-                <div>
-                  <label>Score Range:</label>
-                  <div className="flex items-center gap-2 mt-1">
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={filters.ratingFilters.scoreMin}
-                      onChange={(e) =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          ratingFilters: {
-                            ...prev.ratingFilters,
-                            scoreMin: +e.target.value,
-                          },
-                        }))
-                      }
-                      className="px-2 w-16 rounded-xl bg-white/20"
-                    />
-                    <span>–</span>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
-                      value={filters.ratingFilters.scoreMax}
-                      onChange={(e) =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          ratingFilters: {
-                            ...prev.ratingFilters,
-                            scoreMax: +e.target.value,
-                          },
-                        }))
-                      }
-                      className="px-2 w-16 rounded-xl bg-white/20"
-                    />
-                  </div>
-                </div>
+    {/* Score Range */}
+    <div>
+      <label>Score Range:</label>
+      <div className="flex items-center gap-2 mt-1">
+        <input
+          type="number"
+          min="1"
+          max="10"
+          value={filters.ratingFilters.scoreMin}
+          onChange={(e) =>
+            setFilters((prev) => ({
+              ...prev,
+              ratingFilters: { ...prev.ratingFilters, scoreMin: +e.target.value },
+            }))
+          }
+          className="px-2 w-16 rounded-xl bg-white/20"
+        />
+        <span>–</span>
+        <input
+          type="number"
+          min="1"
+          max="10"
+          value={filters.ratingFilters.scoreMax}
+          onChange={(e) =>
+            setFilters((prev) => ({
+              ...prev,
+              ratingFilters: { ...prev.ratingFilters, scoreMax: +e.target.value },
+            }))
+          }
+          className="px-2 w-16 rounded-xl bg-white/20"
+        />
+      </div>
+    </div>
 
-                {/* Sliders */}
-                {["Min Noise level", "Min Cleanliness level", "Min Equipment Quality", "Min Wifi Strength"].map(
-                  (field) => (
-                    <div key={field}>
-                      <label className="block capitalize">
-                        {field.replace("_", " ")}: {filters.ratingFilters[field]}
-                      </label>
-                      <input
-                        type="range"
-                        min="1"
-                        max={field.includes("Quality") || field.includes("Wifi") ? "3" : "5"}
-                        value={filters.ratingFilters[field]}
-                        onChange={(e) =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            ratingFilters: {
-                              ...prev.ratingFilters,
-                              [field]: +e.target.value,
-                            },
-                          }))
-                        }
-                        className="w-64"
-                      />
-                    </div>
-                  )
-                )}
+    {/* Other rating sliders */}
+    {[
+      { label: "Noise Level", key: "noiseMax", min: 1, max: 5 },
+      { label: "Cleanliness Level", key: "cleanlinessMax", min: 1, max: 5 },
+      { label: "Equipment Quality", key: "equipment_qualityMax", min: 1, max: 3 },
+      { label: "WiFi Strength", key: "wifi_strengthMax", min: 1, max: 3 },
+    ].map(({ label, key, min, max }) => (
+      <div key={key}>
+        <label className="block">{label}: {filters.ratingFilters[key]}</label>
+        <input
+          type="range"
+          min={min}
+          max={max}
+          value={filters.ratingFilters[key]}
+          onChange={(e) =>
+            setFilters((prev) => ({
+              ...prev,
+              ratingFilters: { ...prev.ratingFilters, [key]: +e.target.value },
+            }))
+          }
+          className="w-64"
+        />
+      </div>
+    ))}
+
+
 
                 {/* Equipment + Accessibility Tags */}
                 <div>
@@ -428,9 +454,7 @@ const LocationSearch = () => {
               </div>
             )}
           </div>
-
-        )}
-
+)}
 
         {/* Results Table */}
         <div className="overflow-x-auto">

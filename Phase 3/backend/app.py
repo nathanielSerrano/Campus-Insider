@@ -258,7 +258,7 @@ def search_locations():
     state = request.args.get("state", "")
     query = request.args.get("q", "")
 
-    # OPTIONAL FILTERS
+    # Optional filters
     types = request.args.get("types", "")          # room, building, nonbuilding
     room_sizes = request.args.get("roomSizes", "") # small,medium,large
     room_types = request.args.get("roomTypes", "") # study room, computer room...
@@ -270,127 +270,128 @@ def search_locations():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
 
+    # Base SQL
     sql = """
-SELECT 
-    L.name AS location_name,
-
-    CASE 
-        WHEN B.LID IS NOT NULL THEN 'Building'
-        WHEN NB.LID IS NOT NULL THEN 'Non-building'
-        ELSE 'Room'
-    END AS location_type,
-
-    R.room_number,
-    R.room_type,
-    R.room_size,
-
-    BL.name AS building_name,     -- building name from the building’s location row
-    L.campus_name                 -- directly from location table
-
-FROM location L
-LEFT JOIN buildings B ON L.LID = B.LID
-LEFT JOIN nonbuildings NB ON L.LID = NB.LID
-LEFT JOIN rooms R ON L.LID = R.LID
-
--- FIX: use building_LID instead of building_id
-LEFT JOIN buildings BR ON R.building_LID = BR.LID
-LEFT JOIN location BL ON BR.LID = BL.LID
-
-JOIN university U ON L.university_id = U.university_id
-WHERE U.name = %s
-"""
-
+    SELECT DISTINCT
+        L.LID,
+        L.name AS location_name,
+        CASE 
+            WHEN B.LID IS NOT NULL THEN 'Building'
+            WHEN NB.LID IS NOT NULL THEN 'Non-building'
+            ELSE 'Room'
+        END AS location_type,
+        R.room_number,
+        R.room_type,
+        R.room_size,
+        BL.name AS building_name,
+        L.campus_name
+    FROM location L
+    LEFT JOIN buildings B ON L.LID = B.LID
+    LEFT JOIN nonbuildings NB ON L.LID = NB.LID
+    LEFT JOIN rooms R ON L.LID = R.LID
+    LEFT JOIN buildings BR ON R.building_LID = BR.LID
+    LEFT JOIN location BL ON BR.LID = BL.LID
+    JOIN university U ON L.university_id = U.university_id
+    """
 
     params = [university_name]
+    conditions = ["U.name = %s"]
 
-    # ------ OPTIONAL BASE CONDITIONS ------
+    # Base filters
     if state:
-        sql += " AND U.state = %s"
+        conditions.append("U.state = %s")
         params.append(state)
-
     if query:
-        sql += " AND L.name LIKE %s"
+        conditions.append("L.name LIKE %s")
         params.append(f"%{query}%")
-
-    # ------ TYPE FILTERS ------
     if types:
         type_list = [t.strip().lower() for t in types.split(",")]
-
         type_conditions = []
-        if "room" in type_list:
-            type_conditions.append("R.LID IS NOT NULL")
-        if "building" in type_list:
-            type_conditions.append("B.LID IS NOT NULL")
-        if "nonbuilding" in type_list:
-            type_conditions.append("NB.LID IS NOT NULL")
-
+        if "room" in type_list: type_conditions.append("R.LID IS NOT NULL")
+        if "building" in type_list: type_conditions.append("B.LID IS NOT NULL")
+        if "nonbuilding" in type_list: type_conditions.append("NB.LID IS NOT NULL")
         if type_conditions:
-            sql += " AND (" + " OR ".join(type_conditions) + ")"
-
-    # ------ ROOM SIZE FILTER ------
+            conditions.append("(" + " OR ".join(type_conditions) + ")")
     if room_sizes:
         sizes = room_sizes.split(",")
         placeholders = ", ".join(["%s"] * len(sizes))
-        sql += f" AND R.room_size IN ({placeholders})"
+        conditions.append(f"R.room_size IN ({placeholders})")
         params.extend(sizes)
-
-    # ------ ROOM TYPE FILTER ------
     if room_types:
         rtypes = room_types.split(",")
         placeholders = ", ".join(["%s"] * len(rtypes))
-        sql += f" AND R.room_type IN ({placeholders})"
+        conditions.append(f"R.room_type IN ({placeholders})")
         params.extend(rtypes)
-
-    # ------ ROOM NUMBER FILTER ------
     if room_number:
-        sql += " AND R.room_number = %s"
+        conditions.append("R.room_number = %s")
         params.append(room_number)
-
-    # ------ CAMPUS FILTER ------
     if campus:
-        sql += " AND L.campus_name LIKE %s"
+        conditions.append("L.campus_name LIKE %s")
         params.append(f"%{campus}%")
-    
-    # ------ BUILDING FILTER ------
     if building:
-        sql += " AND BL.name LIKE %s"
+        conditions.append("BL.name LIKE %s")
         params.append(f"%{building}%")
 
-     # Execute base SQL first
+    # Rating filters
+    if search_by_rating:
+        rating_fields = ["score", "noise", "cleanliness", "equipment_quality", "wifi_strength"]
+        rating_conditions = []
+        rating_params = []
+
+        for field in rating_fields:
+            min_val = request.args.get(f"{field}Min", type=int)
+            max_val = request.args.get(f"{field}Max", type=int)
+            if min_val is not None and max_val is not None:
+                rating_conditions.append(f"R2.{field} BETWEEN %s AND %s")
+                rating_params.extend([min_val, max_val])
+
+        equipment_tags = request.args.getlist("equipmentTags")
+        accessibility_tags = request.args.getlist("accessibilityTags")
+
+        # if equipment_tags:
+        #     placeholders = ", ".join(["%s"] * len(equipment_tags))
+        #     sql += f" LEFT JOIN rating_equipment RE ON RE.RID = R2.RID AND RE.equipment_tag IN ({placeholders})"
+        #     params.extend(equipment_tags)
+
+        # if accessibility_tags:
+        #     placeholders = ", ".join(["%s"] * len(accessibility_tags))
+        #     sql += f" LEFT JOIN rating_accessibility RA ON RA.RID = R2.RID AND RA.accessibility_tag IN ({placeholders})"
+        #     params.extend(accessibility_tags)
+
+        # Only join ratings table if at least one filter is set
+        if rating_conditions or equipment_tags or accessibility_tags:
+            # Join ratings first
+            sql += " LEFT JOIN ratings R2 ON R2.LID = L.LID"
+
+            # Join equipment and accessibility if needed
+            if equipment_tags:
+                placeholders = ", ".join(["%s"] * len(equipment_tags))
+                sql += f" LEFT JOIN rating_equipment RE ON RE.RID = R2.RID AND RE.equipment_tag IN ({placeholders})"
+                params.extend(equipment_tags)
+
+            if accessibility_tags:
+                placeholders = ", ".join(["%s"] * len(accessibility_tags))
+                sql += f" LEFT JOIN rating_accessibility RA ON RA.RID = R2.RID AND RA.accessibility_tag IN ({placeholders})"
+                params.extend(accessibility_tags)
+
+            # Add all rating_conditions to WHERE, not ON
+            if rating_conditions:
+                conditions.append("(" + " AND ".join(rating_conditions) + ")")
+                params.extend(rating_params)
+
+
+
+
+    # Combine base conditions
+    if conditions:
+        sql += " WHERE " + " AND ".join(conditions)
+
     cursor.execute(sql, params)
     results = cursor.fetchall()
-
-    # Rating filter
-    if search_by_rating:
-        rating_type = request.args.get("ratingType")  # e.g., "score", "noise"
-        min_val = request.args.get("ratingMin", 1, type=int)
-        max_val = request.args.get("ratingMax", 10, type=int)
-        campus_name = request.args.get("campus")  # optional
-
-        # Call the stored procedure
-        cursor.callproc(
-            "SearchWithRating",
-            [university_name, state, campus_name, rating_type, min_val, max_val]
-        )
-
-        # Collect procedure results
-        rating_results = []
-        for result in cursor.stored_results():
-            rating_results.extend(result.fetchall())
-
-        # Optionally merge rating_results with your base results
-        # For now, just return rating results separately
-        final_results = []
-        rating_lids = {r['LID'] for r in rating_results}
-        for res in results:
-            if res['LID'] in rating_lids:
-                final_results.append(res)
-        results = final_results
-
-        # return jsonify({"results": results, "ratings": rating_results})
-
     cursor.close()
     return jsonify({"results": results})
+
+
 
 @app.route("/api/equipmentTags")
 def get_equipment_tags():
@@ -410,8 +411,7 @@ def get_equipment_tags():
     if row:
         # Convert 'val1','val2','val3',... to a Python list
         enum_list = [v.strip("'") for v in row[0].split(",")]
-        clean_tags = [v.replace("_"," ") for v in enum_list]
-        return jsonify({"tags": clean_tags})
+        return jsonify({"tags": enum_list})
     return jsonify({"tags": []})
 
 @app.route("/api/accessibilityTags")
@@ -430,9 +430,9 @@ def get_accessibility_tags():
     cursor.close()
 
     if row:
+        # Convert 'val1','val2','val3',... to a Python list
         enum_list = [v.strip("'") for v in row[0].split(",")]
-        clean_tags = [v.replace("_"," ") for v in enum_list]
-        return jsonify({"tags": clean_tags})
+        return jsonify({"tags": enum_list})
     return jsonify({"tags": []})
 
 @app.route("/api/request-room", methods=["POST"])
@@ -468,7 +468,7 @@ def api_request_room():
 
 @app.route("/api/reviews", methods=["GET"])
 def get_reviews():
-    """Fetch all ratings for a given location and university."""
+    """Fetch all ratings for a given location and university, including tags."""
     location_name = request.args.get("location")
     university_name = request.args.get("university")
 
@@ -478,6 +478,7 @@ def get_reviews():
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
 
+    # --- Fetch reviews ---
     sql = """
     SELECT 
         r.RID,
@@ -501,9 +502,29 @@ def get_reviews():
     cursor.execute(sql, (location_name, university_name))
     reviews = cursor.fetchall()
 
+    # --- Attach tags for each review ---
+    for review in reviews:
+        rid = review["RID"]
+
+        # Equipment tags
+        cursor.execute(
+            "SELECT equipment_tag FROM rating_equipment WHERE RID = %s",
+            (rid,)
+        )
+        review["equipment_tags"] = [row["equipment_tag"] for row in cursor.fetchall()]
+
+        # Accessibility tags
+        cursor.execute(
+            "SELECT accessibility_tag FROM rating_accessibility WHERE RID = %s",
+            (rid,)
+        )
+        review["accessibility_tags"] = [row["accessibility_tag"] for row in cursor.fetchall()]
+
     cursor.close()
     conn.close()
+
     return jsonify({"reviews": reviews})
+
 
 
 @app.route("/api/addReview", methods=["POST"])
@@ -520,6 +541,10 @@ def add_review():
         ]
         if not all(field in data for field in required_fields):
             return jsonify({"error": "Missing fields"}), 400
+        
+        # Optional tag lists
+        equipment_tags = data.get("equipment_tags", [])
+        accessibility_tags = data.get("accessibility_tags", [])
 
         conn = get_db()
         cursor = conn.cursor(dictionary=True, buffered=True)
@@ -558,7 +583,31 @@ def add_review():
         ))
         conn.commit()
 
-        return jsonify({"message": "Review added successfully", "role": role, "username": data["username"]})
+        # Retrieve the RID for tag inserts
+        rid = cursor.lastrowid
+
+        # --- Insert Equipment Tags ---
+        for tag in equipment_tags:
+            cursor.execute(
+                "INSERT INTO rating_equipment (RID, equipment_tag) VALUES (%s, %s)",
+                (rid, tag)
+            )
+
+        # --- Insert Accessibility Tags ---
+        for tag in accessibility_tags:
+            cursor.execute(
+                "INSERT INTO rating_accessibility (RID, accessibility_tag) VALUES (%s, %s)",
+                (rid, tag)
+            )
+
+        conn.commit()
+
+        return jsonify({
+            "message": "Review added successfully",
+            "role": role,
+            "username": data["username"],
+            "RID": rid
+        })
 
     except Exception as e:
         # Catch all other errors and return JSON instead of HTML
@@ -643,6 +692,8 @@ AND U.name = %s
         SELECT R.RID,
                U.username AS user_type,
                U.role AS role,
+               university.name AS user_university,
+               university.state AS user_state,
                R.score,
                R.noise,
                R.cleanliness,
@@ -653,6 +704,7 @@ AND U.name = %s
                GROUP_CONCAT(DISTINCT RE2.accessibility_tag) AS tags_accessibility
         FROM ratings R
         JOIN users U ON R.UID = U.uid
+        LEFT JOIN university ON U.university_id = university.university_id
         LEFT JOIN rating_equipment RE ON R.RID = RE.RID
         LEFT JOIN rating_accessibility RE2 ON R.RID = RE2.RID
         WHERE R.LID = %s
@@ -665,8 +717,12 @@ AND U.name = %s
 
     # Convert comma-separated tags → arrays
     for r in ratings:
-        r["tags_equipment"] = r["tags_equipment"].split(",") if r["tags_equipment"] else []
-        r["tags_accessibility"] = r["tags_accessibility"].split(",") if r["tags_accessibility"] else []
+        r["equipment_tags"] = r["tags_equipment"].split(",") if r["tags_equipment"] else []
+        r["accessibility_tags"] = r["tags_accessibility"].split(",") if r["tags_accessibility"] else []
+
+        # optional: remove the old keys
+        r.pop("tags_equipment", None)
+        r.pop("tags_accessibility", None)
 
     cursor.close()
     return {"location": location_info, "ratings": ratings}

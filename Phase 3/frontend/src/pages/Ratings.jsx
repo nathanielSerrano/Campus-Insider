@@ -21,8 +21,8 @@ const Ratings = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const [showForm, setShowForm] = useState(false); // <-- NEW
-  const [equipTag, setEquipTag] = useState(null);
-  const [accessTag, setAccessTag] = useState(null);
+  const [equipTags, setEquipTags] = useState([]);
+  const [accessTags, setAccessTags] = useState([]);
 
   const safeEmail = user?.email || "";   // ← fallback for non-logged in users
 
@@ -74,6 +74,8 @@ const Ratings = () => {
       location: locationName,
       university: universityName,
       username,
+      equipment_tags: equipTags,
+      accessibility_tags: accessTags,
     };
 
     fetch("/api/addReview", {
@@ -109,6 +111,18 @@ const Ratings = () => {
             ratings.length) *
             100
         ) / 100;
+  function formatTag(tag) {
+    return tag.replace(/_/g, " ");
+  }
+  function goToUniversity(univ, state) {
+    navigate(
+      `/university/${encodeURIComponent(univ)}?state=${encodeURIComponent(state)}`
+    );
+  }
+
+  console.log(ratings);
+
+
 
   if (loading) return <div className="text-white p-4">Loading...</div>;
   if (!locationInfo)
@@ -156,52 +170,99 @@ const Ratings = () => {
             <p className="text-slate-300">No ratings yet.</p>
           )}
 
-          {ratings.map((r, i) => (
-            <div
-              key={i}
-              className="p-4 bg-white/10 rounded-xl border border-white/20 flex flex-col md:flex-row justify-between items-center"
-            >
-              <div className="flex-1">
-                <p className="font-semibold text-yellow-200">
-                  {r.role || "User"} {/* <-- NOW SHOWS ROLE */}
-                </p>
-                {r.comment && <p className="italic">{r.comment}</p>}
-              </div>
+{ratings.map((r, i) => (
+  <div
+    key={i}
+    className="p-4 bg-white/10 rounded-xl border border-white/20 flex flex-col md:flex-row justify-between items-start gap-4"
+  >
+    {/* LEFT SIDE — USER + COMMENT + TAGS */}
+    <div className="flex-1">
+      <p className="font-semibold text-yellow-200">
+        {r.role || "User"} {r.role && (<span
+          className="text-slate-300 cursor-pointer hover:underline"
+          onClick={() => goToUniversity(r.user_university, r.user_state)}
+        >
+          @ {r.user_university}
+        </span>)}
+      </p>
 
-              <div className="flex space-x-6 mt-2 md:mt-0">
-                <div className="text-center">
-                  <span className="text-3xl font-bold text-yellow-300">
-                    {r.score}
-                  </span>
-                  <p className="text-sm text-white/70">Score</p>
-                </div>
-                <div className="text-center">
-                  <span className="text-2xl font-bold text-green-300">
-                    {r.noise}
-                  </span>
-                  <p className="text-sm text-white/70">Noise</p>
-                </div>
-                <div className="text-center">
-                  <span className="text-2xl font-bold text-blue-300">
-                    {r.cleanliness}
-                  </span>
-                  <p className="text-sm text-white/70">Clean</p>
-                </div>
-                <div className="text-center">
-                  <span className="text-2xl font-bold text-purple-300">
-                    {r.equipment_quality}
-                  </span>
-                  <p className="text-sm text-white/70">Equip</p>
-                </div>
-                <div className="text-center">
-                  <span className="text-2xl font-bold text-pink-300">
-                    {r.wifi_strength}
-                  </span>
-                  <p className="text-sm text-white/70">WiFi</p>
-                </div>
-              </div>
-            </div>
-          ))}
+      {r.comment && <p className="italic mb-2">{r.comment}</p>}
+
+      {/* Equipment Tags */}
+      {r.equipment_tags?.length > 0 && (
+        <div className="mb-1">
+          <p className="text-sm text-blue-300 font-semibold mb-1">
+            Equipment:
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {r.equipment_tags.map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-2 py-1 bg-blue-800/30 text-blue-200 text-xs rounded-full border border-blue-500/30"
+              >
+                {formatTag(tag)}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Accessibility Tags */}
+      {r.accessibility_tags?.length > 0 && (
+        <div className="mt-2">
+          <p className="text-sm text-green-300 font-semibold mb-1">
+            Accessibility:
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {r.accessibility_tags.map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-2 py-1 bg-green-800/30 text-green-200 text-xs rounded-full border border-green-500/30"
+              >
+                {formatTag(tag)}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* RIGHT SIDE — SCORES */}
+    <div className="flex space-x-6 md:mt-0">
+      <div className="text-center">
+        <span className="text-3xl font-bold text-yellow-300">
+          {r.score}
+        </span>
+        <p className="text-sm text-white/70">Score</p>
+      </div>
+      <div className="text-center">
+        <span className="text-2xl font-bold text-green-300">
+          {r.noise}
+        </span>
+        <p className="text-sm text-white/70">Noise</p>
+      </div>
+      <div className="text-center">
+        <span className="text-2xl font-bold text-blue-300">
+          {r.cleanliness}
+        </span>
+        <p className="text-sm text-white/70">Clean</p>
+      </div>
+      <div className="text-center">
+        <span className="text-2xl font-bold text-purple-300">
+          {r.equipment_quality}
+        </span>
+        <p className="text-sm text-white/70">Equip</p>
+      </div>
+      <div className="text-center">
+        <span className="text-2xl font-bold text-pink-300">
+          {r.wifi_strength}
+        </span>
+        <p className="text-sm text-white/70">WiFi</p>
+      </div>
+    </div>
+  </div>
+))}
+
         </div>
 
         {/* === Add Review Section Toggle Button === */}
@@ -309,45 +370,58 @@ const Ratings = () => {
               </div>
 
               <div className="md:col-span-3">
-                <label>Comment</label>
-                <textarea
-                  value={newReview.comment}
-                  onChange={(e) =>
-                    setNewReview({ ...newReview, comment: e.target.value })
-                  }
-                  className="w-full p-2 rounded-lg bg-white/10 border border-white/20 text-white"
-                  rows={3}
-                  placeholder="Optional comment..."
-                />
-              </div>
-                  <h3 className="font-semibold mt-6">Equipment Tags</h3>
-                  <TagSelector
-                    // selectedTags={filters.selectedEquipmentTags || []}
-                    // setSelectedTags={(tags) =>
-                      // setFilters({ ...filters, selectedEquipmentTags: tags })
-                    // }
-                    placeholder="Search equipment tags..."
-                    fetchUrl="/api/equipmentTags"
-                  />
+  <label>Comment</label>
+  <textarea
+    value={newReview.comment}
+    onChange={(e) =>
+      setNewReview({ ...newReview, comment: e.target.value })
+    }
+    className="w-full p-2 rounded-lg bg-white/10 border border-white/20 text-white"
+    rows={3}
+    placeholder="Optional comment..."
+  />
+</div>
 
-                  <h3 className="font-semibold mt-6">Accessibility Tags</h3>
-                  <TagSelector
-                    // selectedTags={filters.selectedAccessibilityTags || []}
-                    // setSelectedTags={(tags) =>
-                      // setFilters({ ...filters, selectedAccessibilityTags: tags })
-                    // }
-                    placeholder="Search accessibility tags..."
-                    fetchUrl="/api/accessibilityTags"
-                  />
+{/* === TAG SELECTORS === */}
 
-              <div className="md:col-span-3 flex justify-end">
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-xl"
-                >
-                  Submit Review
-                </button>
-              </div>
+<h3 className="font-semibold mt-6 col-span-3">Tags</h3>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-3">
+
+  {/* Equipment Tags */}
+  <div>
+    <h4 className="font-medium mb-2">Equipment Tags</h4>
+    <TagSelector
+      selectedTags={equipTags}
+      setSelectedTags={setEquipTags}
+      placeholder="Search equipment tags..."
+      fetchUrl="/api/equipmentTags"
+    />
+  </div>
+
+  {/* Accessibility Tags */}
+  <div>
+    <h4 className="font-medium mb-2">Accessibility Tags</h4>
+    <TagSelector
+      selectedTags={accessTags}
+      setSelectedTags={setAccessTags}
+      placeholder="Search accessibility tags..."
+      fetchUrl="/api/accessibilityTags"
+    />
+  </div>
+
+</div>
+
+
+<div className="md:col-span-3 flex justify-end mt-4">
+  <button
+    type="submit"
+    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-xl"
+  >
+    Submit Review
+  </button>
+</div>
+
             </form>
 
             {message && (
