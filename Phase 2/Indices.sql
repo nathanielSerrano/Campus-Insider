@@ -32,6 +32,6 @@ CREATE INDEX idx_rooms_LID ON rooms (LID);
 CREATE INDEX idx_buildings_LID ON buildings (LID);
 
 -- to speed up full and partial location list queries
-CREATE INDEX idx_loc_uni_campus_name ON location(university_id, campus_name, name);
+CREATE INDEX idx_loc_uni_campus_name ON location (university_id, campus_name, name);
 
 
