@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Home, ArrowLeft } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import AccountButton from "../components/AccountButton";
+import TagSelector from "../components/TagSelector";
 
 const Ratings = () => {
 
@@ -20,6 +21,8 @@ const Ratings = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const [showForm, setShowForm] = useState(false); // <-- NEW
+  const [equipTag, setEquipTag] = useState(null);
+  const [accessTag, setAccessTag] = useState(null);
 
   const safeEmail = user?.email || "";   // ← fallback for non-logged in users
 
@@ -317,6 +320,25 @@ const Ratings = () => {
                   placeholder="Optional comment..."
                 />
               </div>
+                  <h3 className="font-semibold mt-6">Equipment Tags</h3>
+                  <TagSelector
+                    // selectedTags={filters.selectedEquipmentTags || []}
+                    // setSelectedTags={(tags) =>
+                      // setFilters({ ...filters, selectedEquipmentTags: tags })
+                    // }
+                    placeholder="Search equipment tags..."
+                    fetchUrl="/api/equipmentTags"
+                  />
+
+                  <h3 className="font-semibold mt-6">Accessibility Tags</h3>
+                  <TagSelector
+                    // selectedTags={filters.selectedAccessibilityTags || []}
+                    // setSelectedTags={(tags) =>
+                      // setFilters({ ...filters, selectedAccessibilityTags: tags })
+                    // }
+                    placeholder="Search accessibility tags..."
+                    fetchUrl="/api/accessibilityTags"
+                  />
 
               <div className="md:col-span-3 flex justify-end">
                 <button

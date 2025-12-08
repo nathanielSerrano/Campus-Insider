@@ -145,6 +145,7 @@ echo "=== Inserting initial room data ==="
 python3 ../"Phase 2"/web-scraping/insert_colleges.py || echo "insert_colleges.py failed, continuing..."
 python3 ../"Phase 2"/web-scraping/insert_rooms.py || echo "insert_rooms.py failed, continuing..."
 python3 ../"Phase 2"/web-scraping/insert_study_rooms.py || echo "insert_study_rooms.py failed, continuing..."
+python3 ./"Database Feature"/add_admin.py || echo "add_admin.py failed, continuing..."
 
 echo "=== INSTALLATION COMPLETE ==="
 echo "You can now run the application using './run.sh' script."
