@@ -59,8 +59,7 @@ function Home() {
                 </h1>
 
                 <p className="text-slate-200 text-lg mb-8">
-                    Discover the best study spots, classrooms, and campus spaces —
-                    rated by students, for students.
+                Discover the best study spots, classrooms, and campus spaces, reviewed by the people who use them.
                 </p>
 
                 <Link to="/search" className="flex justify-center">

@@ -147,5 +147,4 @@ python3 ../"Phase 2"/web-scraping/insert_rooms.py || echo "insert_rooms.py faile
 python3 ../"Phase 2"/web-scraping/insert_study_rooms.py || echo "insert_study_rooms.py failed, continuing..."
 
 echo "=== INSTALLATION COMPLETE ==="
-cd "$BACKEND_DIR"
-python3 app.py
+echo "You can now run the application using './run.sh' script."

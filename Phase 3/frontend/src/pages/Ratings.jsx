@@ -61,10 +61,10 @@ const Ratings = () => {
     e.preventDefault();
 
     const username = safeEmail;
-    if (!username) {
-      navigate("/register");
-      return;
-    }
+    // if (!username) {
+    //   navigate("/register");
+    //   return;
+    // }
 
     const payload = {
       ...newReview,
@@ -204,7 +204,7 @@ const Ratings = () => {
         {/* === Add Review Section Toggle Button === */}
         <button
           onClick={() => {
-            const user = localStorage.getItem("username");
+            const user = safeEmail;
             if (!user) return navigate("/register");
             setShowForm(!showForm);
           }}

@@ -7,8 +7,6 @@ import dotenv
 dotenv.load_dotenv(dotenv_path=".env")
 db_user = os.getenv("DB_USER")
 db_password = os.getenv("DB_PASSWORD")
-print("DB_USER:", db_user)
-print("DB_PASSWORD:", "SET" if db_password else "EMPTY")
 
 
 # --- Step 1: Load JSON data ---
@@ -39,7 +37,7 @@ for uni in universities:
     )
     result = cursor.fetchone()
     if result:
-        print(f"Skipping {name} ({state}) — already exists with ID {result[0]}")
+        # print(f"Skipping {name} ({state}) — already exists with ID {result[0]}")
         continue
 
     # Insert university
@@ -47,7 +45,7 @@ for uni in universities:
         "INSERT INTO university (name, state, wiki_url) VALUES (%s, %s, %s)",
         (name, state, wiki_url)
     )
-    print(f"Inserted {name} ({state}) with ID {cursor.lastrowid}")
+    # print(f"Inserted {name} ({state}) with ID {cursor.lastrowid}")
 
 # --- Step 4: Commit and close ---
 conn.commit()
