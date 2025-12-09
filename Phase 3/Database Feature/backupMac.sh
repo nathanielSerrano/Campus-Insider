@@ -13,11 +13,12 @@ mkdir -p "$BACKUP_DIR"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_FILE="$BACKUP_DIR/backup_$TIMESTAMP.sql"
 
-mysqldump -u "$DB_USER" -p"$DB_PASSWORD" --all-databases --routines --events > "$BACKUP_FILE"
+mysqldump -u "$DB_USER" -p"$DB_PASSWORD" --set-gtid-purged=OFF --all-databases --routines --events > "$BACKUP_FILE"
 
 if [ $? -eq 0 ]; then
     echo "Backup successful!"
     echo "Saved to: $BACKUP_FILE"
 else
     echo "Backup FAILED."
+
 fi
