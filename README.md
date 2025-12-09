@@ -81,11 +81,12 @@ The application consists of:
   ```
 2. Install dependencies & initialize DB
 
-Before running the installer, edit the `Phase 3/.env` file with the following information:
+Before running the installer, edit the `Phase 3/env-1.txt` file with the following information:
   ```
   DB_USER=root
   DB_PASSWORD=[your MySQL root password]
   ```
+Rename the file to be '.env', still in the phase 3 directory.
 Run the installer:
   ```
   cd "Phase 3"
