@@ -16,8 +16,8 @@ CORS(app)
 def get_db_connection():
     return pymysql.connect(
         host=os.getenv("DB_HOST"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
+        user=os.getenv("DB_USER_WEBAPP"),
+        password=os.getenv("DB_PASSWORD_WEBAPP"),
         database=os.getenv("DB_NAME"),
         port=int(os.getenv("DB_PORT")),
         cursorclass=pymysql.cursors.DictCursor

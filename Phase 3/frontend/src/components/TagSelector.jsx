@@ -44,7 +44,7 @@ export default function TagSelector({ selectedTags = [], setSelectedTags, placeh
         <div className="flex flex-wrap gap-1">
           {selectedTags.map(tag => (
             <div key={tag} className="bg-white/20 text-white px-2 py-1 rounded-full border border-white/30 flex items-center gap-1 backdrop-blur">
-            {tag} <button className="text-red-500 px-2 m-0 bg-inherit rounded border-white/30 backdrop-blur" onClick={() => removeTag(tag)}>&times;</button>
+            {formatTag(tag)} <button className="text-red-500 px-2 m-0 bg-inherit rounded border-white/30 backdrop-blur" onClick={() => removeTag(tag)}>&times;</button>
             </div>
           ))}
         </div>

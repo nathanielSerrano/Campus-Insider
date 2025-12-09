@@ -130,12 +130,14 @@ for sql_file in \
     "$SQL_DIR/schema-implementation/Combined Campus Insider.sql" \
     "$SQL_DIR/Functions.sql" \
     "$SQL_DIR/Indices.sql" \
-    "$SQL_DIR/Procedures.sql" \
-    "Database Feature/define_mysql_user.sql"
+    "$SQL_DIR/Procedures.sql"
 do
     echo "Running $sql_file..."
     mysql -u "$DB_USER" -p"$DB_PASSWORD" < "$sql_file"
 done
+
+APP_RW_PASSWORD=${DB_PASSWORD_WEBAPP} envsubst < "Database Feature/define_mysql_user.sql" | mysql -u "$DB_USER" -p"$DB_PASSWORD"
+
 
 # -----------------------
 # INSERT INITIAL DATA

@@ -40,4 +40,4 @@ def call_create_user_procedure(username, password, role, university, location):
             connection.close()
 
 # Call the function
-call_create_user_procedure('admin', '123', 'Student', 'University of Southern Maine', 'Maine')
+call_create_user_procedure('admin', os.getenv('DB_ADMIN_PASSWORD'), 'student', 'University of Southern Maine', 'Maine')
