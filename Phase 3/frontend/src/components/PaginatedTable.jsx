@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// Description: A reusable paginated and sortable table component.
 import { useState, useMemo } from "react";
 
 const PaginatedTable = ({ data, columns, rowsPerPage, currentPage, setCurrentPage, onRowClick }) => {

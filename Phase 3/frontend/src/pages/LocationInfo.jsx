@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// Description: Location Search Page
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TagSelector from "../components/TagSelector";
@@ -102,13 +104,8 @@ const LocationSearch = () => {
     }
 
     if (filters.searchByRating) {
-      // params.append("searchByRating", true);
-      // params.append("ratingMin", filters.ratingFilters.scoreMin);
-      // params.append("ratingMax", filters.ratingFilters.scoreMax);
-
-      // if (filters.searchByRating) {
         params.append("searchByRating", true);
-        params.append("ratingType", "score"); // or whichever metric you want
+        params.append("ratingType", "score");
 
         const rf = filters.ratingFilters;
         for (const key in rf) {

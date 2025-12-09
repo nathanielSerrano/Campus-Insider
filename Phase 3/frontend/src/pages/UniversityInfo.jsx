@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// Description: University information page for Campus Insider application.
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom"
 import { Home, Search } from "lucide-react";

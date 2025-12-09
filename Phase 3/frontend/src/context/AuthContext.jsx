@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano (with assistance from ChatGPT)
+// Description: Context for managing authentication state in the Campus Insider application.
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();

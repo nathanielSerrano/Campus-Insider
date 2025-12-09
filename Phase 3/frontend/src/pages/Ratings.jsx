@@ -1,3 +1,5 @@
+// Author: Benjamin Franklin
+// Description: Ratings page for a specific location at a university.
 import { useState, useEffect, use } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, ArrowLeft } from "lucide-react";

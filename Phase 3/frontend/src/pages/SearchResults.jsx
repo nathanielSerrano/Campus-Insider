@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// Description: Search results page for universities with filtering options.
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SlidersHorizontal, Search, Home } from "lucide-react";

@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// // Description: Login page for Campus Insider application.
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Home } from "lucide-react";

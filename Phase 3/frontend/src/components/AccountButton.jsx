@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// Description: Account button component with dropdown panel for user actions.
 import { useState, useRef, useEffect } from "react";
 import { User, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";

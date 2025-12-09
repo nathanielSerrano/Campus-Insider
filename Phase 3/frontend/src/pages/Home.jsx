@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// Description: Home page for Campus Insider application.
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import AccountButton from "../components/AccountButton";

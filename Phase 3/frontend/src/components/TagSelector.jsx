@@ -1,3 +1,5 @@
+// Author: Nathaniel Serrano
+// Description: A tag selector component with autocomplete functionality.
 import { useState, useEffect } from "react";
 
 export default function TagSelector({ selectedTags = [], setSelectedTags, placeholder, fetchUrl}) {

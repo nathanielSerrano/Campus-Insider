@@ -1,3 +1,6 @@
+// Author: Nathaniel Serrano
+// Description: Registration page for Campus Insider application.
+
 import { use, useState } from "react";
 import { Eye, EyeOff, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";

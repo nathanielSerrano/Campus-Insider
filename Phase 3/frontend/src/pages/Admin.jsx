@@ -1,3 +1,5 @@
+// Author: Ahmad Mouhsen
+// Description: Admin dashboard for managing users, requests, and entities.
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Home } from "lucide-react";
