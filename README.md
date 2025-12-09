@@ -80,6 +80,7 @@ The application consists of:
   cd Campus-Insider
   ```
 2. Install dependencies & initialize DB
+
 Before running the installer, edit the `Phase 3/.env` file with the following information:
   ```
   DB_USER=root
