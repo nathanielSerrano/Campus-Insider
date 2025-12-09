@@ -1,3 +1,52 @@
+# Application Setup (MacOS)
+
+1. Clone the repository:
+  ```
+  git clone https://github.com/nathanielSerrano/Campus-Insider.git
+  cd Campus-Insider
+  ```
+2. Install dependencies & initialize DB
+
+Before running the installer, edit the `Phase 3/.env` file with the following information:
+  ```
+  DB_USER=root
+  DB_PASSWORD=[your MySQL root password]
+  ```
+Run the installer:
+  ```
+  cd "Phase 3"
+  chmod +x install.sh
+  ./install.sh
+  ```
+This script will:
+ * Install system packages
+ * Create the MySQL database and user
+ * Run all SQL files
+ * Insert colleges, rooms, and study rooms
+ * Install backend + frontend dependencies
+3. Start the application
+  ```
+  chmod +x run.sh
+  ./run.sh
+  ```
+This runs:
+ * Flask backend (port 5000)
+ * Vite frontend (port 5173)
+
+
+## Signing in as Admin
+For the purposes of seeing the current extent of this project, the admin user is automatically inserted into the database upon running `install.sh`. 
+
+To log in as admin, open the web app, navigate to the login page, and enter:
+```
+username: admin
+password: 123
+```
+(Note that this feature is just for testing purposes and would not be so insecure in an official product)
+
+This will enable a "Manage Locations" button at the bottom of each university screen, which will navigate to the incomplete admin dashboard.
+
+
 # Backend Setup (Flask)
 1. Navigate to the backend directory:
    ```
@@ -69,6 +118,7 @@ Fully Functionable Web App -- Due Thursday, December 4, 2025
    * Nathaniel
  * Flask Backend 
    * Ahmad
+
 
 
 
